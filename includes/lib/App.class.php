@@ -6,7 +6,14 @@
  */
 class App {
     
-    /**
+	public static function init() {
+		
+		Date::init();
+		MainDecorator::i();
+		
+	}
+
+	/**
      * 
      * @param type $value
      * @return string
