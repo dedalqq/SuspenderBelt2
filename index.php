@@ -4,11 +4,11 @@
  * @author dedal.qq 
  */
 
-include 'include/init.php';
+include 'includes/init.php';
 
 $menu = new TopMenu();
 
 
 
 
-MainDecorator::i()->rander();
+//MainDecorator::i()->rander();

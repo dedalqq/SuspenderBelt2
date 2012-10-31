@@ -1,11 +1,11 @@
 <?php
 
 function __autoload($class_name) {
-    if (file_exists('include/lib/'.$class_name.'.class.php')) {
-        include_once 'include/lib/'.$class_name.'.class.php';
+    if (file_exists('includes/lib/'.$class_name.'.class.php')) {
+        include_once 'includes/lib/'.$class_name.'.class.php';
     }
-    elseif (file_exists('include/components/'.$class_name.'.class.php')) {
-        include_once 'include/components/'.$class_name.'.class.php';
+    elseif (file_exists('includes/components/'.$class_name.'.class.php')) {
+        include_once 'includes/components/'.$class_name.'.class.php';
     }
 }
 
