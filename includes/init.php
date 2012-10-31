@@ -10,6 +10,7 @@ function __autoload($class_name) {
 }
 
 include 'functions.php';
+include 'config.php';
 
 ini_set('display_errors', '1');
 
@@ -17,21 +18,5 @@ ini_set('session.gc_maxlifetime', 60*60*24*365);
 ini_set('session.cookie_lifetime', 60*60*24*365);
 
 App::init();
-
-
-
-
-//
-//MySql::getInstance(
-//        $GLOBALS['config']['db_host'],
-//        $GLOBALS['config']['db_login'],
-//        $GLOBALS['config']['db_password'],
-//        $GLOBALS['config']['db_databane'],
-//        $GLOBALS['config']['db_prefix']
-//        );
-
-//MySql::getInstance()->char_set($GLOBALS['config']['encoding']);
-
-//Autorisation::getInstance();
 
 ?>

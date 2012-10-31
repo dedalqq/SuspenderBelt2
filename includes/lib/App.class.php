@@ -1,19 +1,29 @@
 <?php
+
 /**
  * Description of Application
  *
  * @author dedal.qq
  */
 class App {
-    
-	public static function init() {
-		
-		Date::init();
-		MainDecorator::i();
-		
-	}
 
-	/**
+    public static function init() {
+
+        Date::init();
+        MainDecorator::i();
+
+        MySQL::init(
+                $GLOBALS['db_config']['login'],
+                $GLOBALS['db_config']['password'],
+                $GLOBALS['db_config']['host'],
+                $GLOBALS['db_config']['db_name'],
+                $GLOBALS['db_config']['db_prefix']
+        );
+
+        MySql::i()->char_set($GLOBALS['config']['encoding']);
+    }
+
+    /**
      * 
      * @param type $value
      * @return string
@@ -23,11 +33,11 @@ class App {
         $format = array('b', 'Kb', 'Mb', 'Gb');
         while ($value > 1024) {
             $i++;
-            $value = $value/1024;
+            $value = $value / 1024;
         }
-        return round($value, 2).' '.$format[$i];
+        return round($value, 2) . ' ' . $format[$i];
     }
-    
+
     /**
      * 
      * @param type $parametrs
@@ -35,11 +45,10 @@ class App {
      * @return string
      */
     public static function raplaceUriParametrs($parametrs = array(), $uri = '') {
-        
+
         return '';
     }
-    
-    
+
 }
 
 ?>
