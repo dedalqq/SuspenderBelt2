@@ -17,19 +17,17 @@ ini_set('session.gc_maxlifetime', 60*60*24*365);
 ini_set('session.cookie_lifetime', 60*60*24*365);
 
 Date::init();
+//
+//MySql::getInstance(
+//        $GLOBALS['config']['db_host'],
+//        $GLOBALS['config']['db_login'],
+//        $GLOBALS['config']['db_password'],
+//        $GLOBALS['config']['db_databane'],
+//        $GLOBALS['config']['db_prefix']
+//        );
 
-Tpl::getInstance($GLOBALS['config']['tpl_folder']);
+//MySql::getInstance()->char_set($GLOBALS['config']['encoding']);
 
-MySql::getInstance(
-        $GLOBALS['config']['db_host'],
-        $GLOBALS['config']['db_login'],
-        $GLOBALS['config']['db_password'],
-        $GLOBALS['config']['db_databane'],
-        $GLOBALS['config']['db_prefix']
-        );
-
-MySql::getInstance()->char_set($GLOBALS['config']['encoding']);
-
-Autorisation::getInstance();
+//Autorisation::getInstance();
 
 ?>
