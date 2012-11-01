@@ -12,6 +12,8 @@ class App {
         Date::init();
         MainDecorator::i();
 
+        PageElement::init($GLOBALS['config']['tpl_folder']);
+        
         MySQL::init(
                 $GLOBALS['db_config']['login'],
                 $GLOBALS['db_config']['password'],

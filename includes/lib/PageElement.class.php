@@ -1,56 +1,58 @@
 <?php
+
 /**
  * Description of PageElement
  *
  * @author dedalqq
  */
 abstract class PageElement extends Object {
-    
-    const STRING = 1;
-    const INT = 2;
 
-    public static $tpl_folder;
-    
+    /**
+     * текущий шаблон
+     * @var type 
+     */
+    private static $tpl_folder;
+
     /**
      * Масов строк шаблона
      * @var array
      */
     protected $tpl;
-    
-    /**
-     * Данные
-     * @var array
-     */
-    protected $data;
-    
-    /**
-     * Свойства
-     * @var array
-     */
-    protected $properties;
-    
+
     /**
      * Имя шаблона который надо использовать
      * @var type 
      */
     private $tpl_name;
-    
+
     /**
      * Имя шаблона который удалось загрузить
      * @var string
      */
     private $curent_tpl_name = null;
+    
+    /**
+     * Список отображаемых блоков
+     * @var type 
+     */
+    private $bloks = array();
 
     /**
      * @return string
      */
-    public abstract function getTpl();
-
+    public abstract function getTplFileName();
 
     public function __construct() {
         $this->tpl_name = 'main';
+
+        ///// это охуэнно =))
+        $this->tpl = array('qq_', &$this->data['text'], '_ww');
     }
-    
+
+    public static function init($tpl_folder_name) {
+        self::$tpl_folder = $tpl_folder_name;
+    }
+
     /**
      * Установить шаблон
      * @param string $name 
@@ -60,30 +62,68 @@ abstract class PageElement extends Object {
     }
 
     /**
-     *
-     * @param array $data
-     * @return bool
-     */
-    public function setData($data) {
-        foreach ($this->properties as $name => $type) {
-            if ($type == self::INT) {
-                $this->data[$name] = intval($data[$name]);
-            }
-            elseif($type == self::STRING) {
-                $this->data[$name] = strval($data[$name]);
-            }
-        }
-        return true;
-    }
-
-    /**
      * Загружает шаблон и сохраняет его имя
      * @param string $tpl_name 
      */
     private function loadTpl($tpl_name) {
-        
+        //bug(self::$tpl_folder.$this->getTplFileName().'.html');
+
+        $fp = fopen(self::$tpl_folder . $this->getTplFileName() . '.html', 'r');
+
+        if (!$fp) {
+            return false;
+        }
+        $this->tpl = array();
+        $add = false;
+        $pointers = array();
+        $lines_list = array();
+        while (!feof($fp)) {
+            $str = fgets($fp);
+            if (preg_match('/<!-- VIEW ([a-z0-9_]*) -->/', $str, $name)) {
+                if ($name[1] == $tpl_name) {
+                    $add = true;
+                } else {
+                    if ($add) {
+                        break;
+                    }
+                    $add = false;
+                }
+                continue;
+            }
+
+            if (preg_match('/<!-- BEGIN ([a-z0-9_]*) -->/', $str, $name)) {
+                $this->tpl[] = array($name[1], 0);
+                $lines_list[$name[1]] = count($this->tpl)-1;
+                $pointers[$name[1]] = &$this->tpl[count($this->tpl) - 1][1];
+                continue;
+            }
+
+            if (preg_match('/<!-- END ([a-z0-9_]*) -->/', $str, $name)) {
+                $this->tpl[] = array($name[1], $lines_list[$name[1]]);
+                $pointers[$name[1]] = count($this->tpl)-1;
+                continue;
+            }
+
+            if ($add) {
+                
+                $vars = array();
+                $result = preg_split('/{{[a-z0-9_]*}}/', $str);
+                preg_match_all('/{{([a-z0-9_]*)}}/', $str, $vars);
+
+                $this->tpl[] = $result[0];
+                
+                foreach($vars[1] as $i => $v) {
+                    if (isset($this->data[$v])) {
+                        $this->tpl[] = &$this->data[$v];
+                    }
+                    $this->tpl[] = $result[$i+1];
+                }
+            }
+        }
         
         $this->curent_tpl_name = $tpl_name;
+
+        return true;
     }
 
     /**
@@ -101,21 +141,39 @@ abstract class PageElement extends Object {
             $this->loadTpl($this->tpl_name);
         }
         
-        $html = '';
-        /**
-         * @todo реализовать всякую хрень по наподнению шаблона и вывода его
-         */
         
-        return $html;
+        $html = '';
+        
+        for($i=0; $i<count($this->tpl); $i++) {
+            if (is_string($this->tpl[$i])) {
+                $html.= $this->tpl[$i];
+            }
+            else {
+                if (!isset($this->bloks[$this->tpl[$i][0]])) {
+                    $i = $this->tpl[$i][1];
+                }
+            }
+        }
+        return (string)$html;
     }
     
+    public function setBlock($name, $enable = true) {
+        if ($enable) {
+            $this->bloks[$name] = true;
+        }
+        else {
+            unset($this->bloks[$name]);
+        }
+    }
+
     /**
      *
      * @return string
      */
     public function __toString() {
-        return $this->rander();
+        return (string)$this->rander();
     }
+
 }
 
 ?>
