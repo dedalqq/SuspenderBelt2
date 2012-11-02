@@ -4,22 +4,27 @@
  * Description of User
  *
  * @author dedal.qq
+ * 
+ * @property string $login
+ * @property string $password
+ * @property int $avatar_id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $mid_name
  */
 class User extends DataBasePageElement {
     
-    public $login;
-    public $password;
-    public $date;
-    public $avatar_id;
-    public $first_name;
-    public $last_name;
-    public $mid_name;
-    
-    //protected $
+    protected $properties = array(
+        'login' => self::STRING,
+        'password' => self::STRING,
+        'avatar_id' => self::INT,
+        'first_name' => self::STRING,
+        'last_name' => self::STRING,
+        'mid_name' => self::STRING
+    );
 
     public function __construct($id = 0) {
         parent::__construct($id);
-        //$this->
     }
 
     public function getTableName() {
@@ -29,8 +34,6 @@ class User extends DataBasePageElement {
     public function getTplFileName() {
         return 'user';
     }
-    
-    
 }
 
 ?>

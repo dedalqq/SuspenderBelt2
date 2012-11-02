@@ -44,9 +44,6 @@ abstract class PageElement extends Object {
 
     public function __construct() {
         $this->tpl_name = 'main';
-
-        ///// это охуэнно =))
-        $this->tpl = array('qq_', &$this->data['text'], '_ww');
     }
 
     public static function init($tpl_folder_name) {

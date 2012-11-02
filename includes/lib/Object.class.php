@@ -20,11 +20,10 @@ abstract class Object {
      * Свойства
      * @var array
      */
-    protected $properties;
+    protected $properties = array();
 
     public function __construct() {
         $this->data = array();
-        $this->properties = array();
     }
 
     public function __set($name, $value) {
@@ -58,6 +57,10 @@ abstract class Object {
             }
         }
         return true;
+    }
+    
+    public function getData() {
+        return $this->data;
     }
 }
 
