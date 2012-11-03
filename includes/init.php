@@ -12,6 +12,9 @@ function __autoload($class_name) {
 include 'config.php';
 include 'functions.php';
 
+include 'lib/Exception.php';
+set_error_handler(create_function('$c, $m, $f, $l', 'new MyException($m, $c, $f, $l);'), E_ALL);
+
 ini_set('display_errors', '1');
 
 ini_set('session.gc_maxlifetime', 60*60*24*365);

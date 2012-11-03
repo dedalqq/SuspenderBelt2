@@ -29,15 +29,16 @@ abstract class PageElement extends Object {
      * Список отображаемых блоков
      * @var type 
      */
-    private $bloks = array();
+    protected $bloks = array();
 
     /**
      * @return string
      */
     public abstract function getTplFileName();
 
-        public function __construct() {
-        $this->tpl_name = 'main';
+    public function __construct() {
+        parent::__construct();
+        $this->setTplName();
     }
 
     /**
@@ -52,9 +53,9 @@ abstract class PageElement extends Object {
      * Загружает шаблон и сохраняет его имя
      * @param string $tpl_name 
      */
-    private function loadTpl($tpl_name) {
-        //bug(self::$tpl_folder.$this->getTplFileName().'.html');
+    protected function loadTpl($tpl_name = '') {
 
+        $tpl_name = $tpl_name == '' ? $this->tpl_name : $tpl_name;
         $fp = fopen(MainDecorator::$tpl_folder . $this->getTplFileName() . '.html', 'r');
 
         if (!$fp) {
@@ -66,7 +67,7 @@ abstract class PageElement extends Object {
         $lines_list = array();
         while (!feof($fp)) {
             $str = fgets($fp);
-            if (preg_match('/<!-- VIEW ([a-z0-9_]*) -->/', $str, $name)) {
+            if (preg_match('/<!-- VIEW ([a-z0-9_]+) -->/', $str, $name)) {
                 if ($name[1] == $tpl_name) {
                     $add = true;
                 } else {
@@ -78,15 +79,15 @@ abstract class PageElement extends Object {
                 continue;
             }
 
-            if (preg_match('/<!-- BEGIN ([a-z0-9_]*) -->/', $str, $name)) {
-                $this->tpl[] = array($name[1], 0);
+            if (preg_match('/<!-- BEGIN ([a-z0-9_]+) -->/', $str, $name)) {
+                $this->tpl[] = array($name[1], 0, true);
                 $lines_list[$name[1]] = count($this->tpl)-1;
                 $pointers[$name[1]] = &$this->tpl[count($this->tpl) - 1][1];
                 continue;
             }
 
-            if (preg_match('/<!-- END ([a-z0-9_]*) -->/', $str, $name)) {
-                $this->tpl[] = array($name[1], $lines_list[$name[1]]);
+            if (preg_match('/<!-- END ([a-z0-9_]+) -->/', $str, $name)) {
+                $this->tpl[] = array($name[1], $lines_list[$name[1]], false);
                 $pointers[$name[1]] = count($this->tpl)-1;
                 continue;
             }
@@ -94,14 +95,18 @@ abstract class PageElement extends Object {
             if ($add) {
                 
                 $vars = array();
-                $result = preg_split('/{{[a-z0-9_]*}}/', $str);
-                preg_match_all('/{{([a-z0-9_]*)}}/', $str, $vars);
-
+                $result = preg_split('/{{[a-z0-9:_]+}}/', $str);
+                preg_match_all('/{{([a-z0-9_]+:?[a-z0-9_]+)}}/', $str, $vars);
+                
                 $this->tpl[] = $result[0];
                 
                 foreach($vars[1] as $i => $v) {
                     if (isset($this->data[$v])) {
                         $this->tpl[] = &$this->data[$v];
+                    }
+                    else {
+                        $v = explode(':', $v);
+                        $this->tpl[] = &$this->$v[0]->data[$v[1]];
                     }
                     $this->tpl[] = $result[$i+1];
                 }

@@ -66,14 +66,22 @@ abstract class DataBasePageElement extends PageElement {
         $this->current_elements++;
         return true;
     }
-
-    public function save() {
+    
+    protected function beforeSave() {
         if ($this->id == 0) {
             $this->date_create = Date::now();
-            $this->sql->db_insert($this->getTableName(), $this->getData());
         }
         elseif ($this->id > 0) {
             $this->date_modif = Date::now();
+        }
+    }
+
+    public function save() {
+        $this->beforeSave();
+        if ($this->id == 0) {
+            $this->sql->db_insert($this->getTableName(), $this->getData());
+        }
+        elseif ($this->id > 0) {
             $this->sql->db_update($this->getTableName(), $this->getData(), '`id`='.$this->id);
         }
     }

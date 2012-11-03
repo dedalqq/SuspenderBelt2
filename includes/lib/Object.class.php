@@ -14,7 +14,7 @@ abstract class Object {
      * Данные
      * @var array
      */
-    protected $data;
+    public $data;
 
     /**
      * Свойства

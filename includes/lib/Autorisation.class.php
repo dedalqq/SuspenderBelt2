@@ -55,7 +55,7 @@ class Autorisation extends PageElement {
 
         $page->page_title = 'Авторизация';
 
-        $action = App::$url_request[2];
+        $action = App::getCurrentCategory(2);
 
         if ($action == 'login') {
             $login = htmlspecialchars($_POST['login']);

@@ -28,6 +28,8 @@ class MainDecorator extends PageElement {
      */
     private static $object = null;
     
+    public $error_mass;
+    
     protected $properties = array(
         'page_title' => self::STRING,
         'encoding' => self::STRING,
@@ -37,6 +39,11 @@ class MainDecorator extends PageElement {
         'form_login' => self::STRING,
     );
 
+    public function __construct() {
+        parent::__construct();
+        $this->content = '';
+    }
+    
     public function getTplFileName(){
         return 'index';
     }
@@ -44,20 +51,29 @@ class MainDecorator extends PageElement {
     public static function init($tpl_folder_name) {
         self::$tpl_folder = $tpl_folder_name;
     }
+    
+    public function addError($error) {
+        $this->error_mass.= $error;
+    }
 
     /**
      * 
      * @return MainDecorator
      */
     public static function i() {
-        if (self::$object == null && !self::$object instanceof self) {
+        if (self::$object == null || !self::$object instanceof self) {
             self::$object = new self;
         }
         return self::$object;
     }
     
     public function addContent($content, $place = 'content') {
-        $this->data[$place] = $content;
+        if ($place == 'content') {
+            $this->data[$place].= $content;
+        }
+        else {
+            $this->data[$place] = $content;
+        }
     }
 
     public function rander() {
@@ -65,7 +81,12 @@ class MainDecorator extends PageElement {
         $this->encoding = $GLOBALS['config']['encoding'];
         
         $top_menu = new TopMenu;
+        $top_menu->left_itms = array(
+            'omg' => 'омг',
+            'ppc' => 'ппц'
+        );
         $this->addContent($top_menu, 'top_menu');
+        $this->content = $this->error_mass.$this->content;
         
         echo parent::rander();
         echo "\n".'<!-- done: ' . App::getRuningTime() . ' -->';

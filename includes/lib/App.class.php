@@ -7,21 +7,14 @@
  */
 class App {
 
-    public static $url_request;
+    private static $url_request;
 
     private static $start_script;
 
-        public static function init() {
+    public static function init() {
             
         self::$start_script = microtime(true);
             
-        Date::init();
-        MainDecorator::i();
-
-        MainDecorator::init($GLOBALS['config']['tpl_folder']);
-        
-        self::requestHandler();
-        
         MySQL::init(
                 $GLOBALS['db_config']['login'],
                 $GLOBALS['db_config']['password'],
@@ -32,9 +25,17 @@ class App {
 
         MySql::i()->char_set($GLOBALS['config']['encoding']);
         
+        Date::init();
+        
+        MainDecorator::i();
+
+        MainDecorator::init($GLOBALS['config']['tpl_folder']);
+        
+        self::requestHandler();
+        
         Autorisation::i();
     }
-    
+
     public static function requestHandler() {
         if (isset($_SERVER['REDIRECT_URL'])) {
             self::$url_request = explode('/', $_SERVER['REDIRECT_URL']);
@@ -53,7 +54,10 @@ class App {
         if (isset(self::$url_request[(int)$i])) {
             return self::$url_request[(int)$i];
         }
-        return false;
+        elseif (count(self::$url_request) == 0) {
+            return 'main';
+        }
+        return '';
     }
 
     /**
