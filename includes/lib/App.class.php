@@ -7,12 +7,20 @@
  */
 class App {
 
-    public static function init() {
+    public static $url_request;
 
+    private static $start_script;
+
+        public static function init() {
+            
+        self::$start_script = microtime(true);
+            
         Date::init();
         MainDecorator::i();
 
-        PageElement::init($GLOBALS['config']['tpl_folder']);
+        MainDecorator::init($GLOBALS['config']['tpl_folder']);
+        
+        self::requestHandler();
         
         MySQL::init(
                 $GLOBALS['db_config']['login'],
@@ -23,6 +31,29 @@ class App {
         );
 
         MySql::i()->char_set($GLOBALS['config']['encoding']);
+        
+        Autorisation::i();
+    }
+    
+    public static function requestHandler() {
+        if (isset($_SERVER['REDIRECT_URL'])) {
+            self::$url_request = explode('/', $_SERVER['REDIRECT_URL']);
+            unset(self::$url_request[0]);
+        }
+        else {
+            self::$url_request = array();
+        }
+    }
+    
+    public static function getRuningTime() {
+        return microtime(true) - self::$start_script;
+    }
+    
+    public static function getCurrentCategory($i) {
+        if (isset(self::$url_request[(int)$i])) {
+            return self::$url_request[(int)$i];
+        }
+        return false;
     }
 
     /**
@@ -38,6 +69,14 @@ class App {
             $value = $value / 1024;
         }
         return round($value, 2) . ' ' . $format[$i];
+    }
+    
+    /**
+     * 
+     * @return MainDecorator
+     */
+    public static function getMainDecorator() {
+        return MainDecorator::i();
     }
 
     /**

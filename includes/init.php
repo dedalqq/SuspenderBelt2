@@ -9,8 +9,8 @@ function __autoload($class_name) {
     }
 }
 
-include 'functions.php';
 include 'config.php';
+include 'functions.php';
 
 ini_set('display_errors', '1');
 

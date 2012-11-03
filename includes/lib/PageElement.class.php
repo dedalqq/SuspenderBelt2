@@ -8,12 +8,6 @@
 abstract class PageElement extends Object {
 
     /**
-     * текущий шаблон
-     * @var type 
-     */
-    private static $tpl_folder;
-
-    /**
      * Масов строк шаблона
      * @var array
      */
@@ -42,12 +36,8 @@ abstract class PageElement extends Object {
      */
     public abstract function getTplFileName();
 
-    public function __construct() {
+        public function __construct() {
         $this->tpl_name = 'main';
-    }
-
-    public static function init($tpl_folder_name) {
-        self::$tpl_folder = $tpl_folder_name;
     }
 
     /**
@@ -65,7 +55,7 @@ abstract class PageElement extends Object {
     private function loadTpl($tpl_name) {
         //bug(self::$tpl_folder.$this->getTplFileName().'.html');
 
-        $fp = fopen(self::$tpl_folder . $this->getTplFileName() . '.html', 'r');
+        $fp = fopen(MainDecorator::$tpl_folder . $this->getTplFileName() . '.html', 'r');
 
         if (!$fp) {
             return false;
@@ -142,7 +132,7 @@ abstract class PageElement extends Object {
         $html = '';
         
         for($i=0; $i<count($this->tpl); $i++) {
-            if (is_string($this->tpl[$i])) {
+            if (!is_array($this->tpl[$i])) {
                 $html.= $this->tpl[$i];
             }
             else {
