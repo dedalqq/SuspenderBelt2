@@ -23,8 +23,19 @@ abstract class DataBasePageElement extends PageElement {
      */
     private $sql_result;
     
+    /**
+     * Число элементов которое удалось найти
+     * @var int
+     */
     private $num_elements = 0;
+    
+    /**
+     * Порядковый номер текущего элемента
+     * @var int
+     */
     private $current_elements = 0;
+    
+    protected $rander_all_elements = false;
 
     public function __construct($id = 0) {
         parent::__construct();
@@ -44,6 +55,10 @@ abstract class DataBasePageElement extends PageElement {
     
     abstract protected function getTableName();
     
+    public function randerAll($value = true) {
+        $this->rander_all_elements = $value;
+    }
+
     public function load($where = '1') {
         if ($this->id > 0) {
             $where = '`id`='.$this->id;
@@ -53,16 +68,25 @@ abstract class DataBasePageElement extends PageElement {
         $this->num_elements = $this->sql->getCountSelected();
         
         if ($this->num_elements > 0) {
+            $this->current_elements = 0;
             $this->fetch();
+            if ($this instanceof User) {
+                //bug($this->login);
+            }
         }
         return false;
     }
     
+    public function updateComposition() {
+        
+    }
+
     public function fetch() {
         if ($this->current_elements == $this->num_elements) {
             return false;
         }
         $this->setData($this->sql->getDbRow($this->sql_result));
+        $this->updateComposition();
         $this->current_elements++;
         return true;
     }
@@ -84,8 +108,7 @@ abstract class DataBasePageElement extends PageElement {
         elseif ($this->id > 0) {
             $this->sql->db_update($this->getTableName(), $this->getData(), '`id`='.$this->id);
         }
-    }
-    
+    }    
 }
-
+    
 ?>

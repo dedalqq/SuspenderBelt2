@@ -59,6 +59,15 @@ class App {
         }
         return '';
     }
+    
+    public static function getPageId() {
+        if (self::$url_request[count(self::$url_request)] != '') {
+            return self::$url_request[count(self::$url_request)];
+        }
+        else {
+            return self::$url_request[count(self::$url_request)-1];
+        }
+    }
 
     /**
      * 
@@ -81,6 +90,17 @@ class App {
      */
     public static function getMainDecorator() {
         return MainDecorator::i();
+    }
+    
+    public static function error404() {
+        $info = new PageInfo();
+        $info->setError();
+        $info->page_title = 'Ошибка 404.';
+        $info->info_mass = 'Мы приносим вам глубочайшие извинения, но к сожалению данная страница не найдена Т_Т.';
+        MainDecorator::i()->addContent($info);
+        
+        App::getMainDecorator()->rander();
+        exit();
     }
 
     /**

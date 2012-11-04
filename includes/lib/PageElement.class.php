@@ -17,7 +17,7 @@ abstract class PageElement extends Object {
      * Имя шаблона который надо использовать
      * @var type 
      */
-    private $tpl_name;
+    public $tpl_name;
 
     /**
      * Имя шаблона который удалось загрузить
@@ -30,6 +30,8 @@ abstract class PageElement extends Object {
      * @var type 
      */
     protected $bloks = array();
+    
+    protected $values = array();
 
     /**
      * @return string
@@ -104,9 +106,14 @@ abstract class PageElement extends Object {
                     if (isset($this->data[$v])) {
                         $this->tpl[] = &$this->data[$v];
                     }
+                    elseif (isset($this->values[$v])) {
+                        $this->tpl[] = &$this->values[$v];
+                    }
                     else {
                         $v = explode(':', $v);
-                        $this->tpl[] = &$this->$v[0]->data[$v[1]];
+                        if (count($v) == 2) {
+                            $this->tpl[] = &$this->$v[0]->data[$v[1]];
+                        }
                     }
                     $this->tpl[] = $result[$i+1];
                 }
@@ -116,6 +123,19 @@ abstract class PageElement extends Object {
         $this->curent_tpl_name = $tpl_name;
 
         return true;
+    }
+    
+    public function parseHttpRequest() {
+        foreach ($this->properties as $i => $v) {
+            if (isset($_POST[$i])) {
+                if ($v = self::INT) {
+                    $this->data[$i] = intval($_POST[$i]);
+                }
+                if ($v = self::STRING) {
+                    $this->data[$i] = htmlspecialchars($_POST[$i]);
+                }
+            }
+        }
     }
 
     /**
@@ -164,6 +184,10 @@ abstract class PageElement extends Object {
      */
     public function __toString() {
         return (string)$this->rander();
+    }
+    
+    public static function getButton($url, $name) {
+        return '<div><a href="'.$url.'" class="button">'.$name.'</a></div>';
     }
 
 }

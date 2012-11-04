@@ -27,15 +27,26 @@ class Blog extends DataBasePageElement {
     );
     
     public function __construct($id = 0) {
+        $this->user = new User();
         parent::__construct($id);
-        $this->user = new User((int)$this->user_id);
+    }
+    
+    public function updateComposition() {
+        $this->user->id = $this->user_id;
+        $this->user->load();
+        if (Autorisation::i()->getUser()->id == $this->user_id) {
+            $this->setBlock('can_edit');
+        }
+        else {
+            $this->setBlock('can_edit', false);
+        }
     }
     
     public function getUser() {
         return $this->user;
     }
 
-        protected function beforeSave() {
+    protected function beforeSave() {
         parent::beforeSave();
         
         if ($this->id == 0) {
@@ -44,6 +55,10 @@ class Blog extends DataBasePageElement {
         elseif ($this->id > 0) {
             $this->modif_by = Autorisation::i()->getUser()->id;
         }
+        
+        
+        
+        $this->html_text = $this->text;
     }
 
     protected function getTableName() {
@@ -55,10 +70,29 @@ class Blog extends DataBasePageElement {
     }
     
     public function rander($tpl_name = '') {
-        $this->data['date_create'] = Date::format($this->date_create);
+        if ($this->tpl_name == 'blog_form') {
+            if ($this->id == 0) {
+                $this->values['editor_mod'] = 'Создать новое сообщение';
+            }
+            else {
+                $this->values['editor_mod'] = 'Редактировать сообщение';
+            }
+        }
+        
         $block = new ContentBlock();
-        $block->content = parent::rander($tpl_name);
-        return $block;
+        
+        $this->data['date_create'] = Date::format($this->date_create);
+        $block->content = parent::rander();
+        
+        $html = (string)$block;
+        
+        while ($this->fetch()) {
+            $this->data['date_create'] = Date::format($this->date_create);
+            $block->content = parent::rander();
+            $html.= $block;
+        }
+        
+        return $html;
     }
 }
 

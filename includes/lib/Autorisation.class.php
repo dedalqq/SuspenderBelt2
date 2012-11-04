@@ -112,7 +112,7 @@ class Autorisation extends PageElement {
 
     public function isLogin() {
         if ($this->user instanceof User) {
-            return (bool)$this->user->getId();
+            return (bool)$this->user->id;
         } else {
             return false;
         }
