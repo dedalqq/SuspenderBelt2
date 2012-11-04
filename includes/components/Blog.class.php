@@ -49,14 +49,17 @@ class Blog extends DataBasePageElement {
     protected function beforeSave() {
         parent::beforeSave();
         
+        if (empty($this->text) || empty($this->title)) {
+            App::error('Нельзя сохранить сообщение без текста или без заголовка =Р');
+            return false;
+        }
+        
         if ($this->id == 0) {
             $this->user_id = Autorisation::i()->getUser()->id;
         }
         elseif ($this->id > 0) {
             $this->modif_by = Autorisation::i()->getUser()->id;
         }
-        
-        
         
         $this->html_text = $this->text;
     }

@@ -54,7 +54,7 @@ class BlogController {
     
     private function showForm($id = 0) {
         if (!Autorisation::i()->isLogin()) {
-            App::error404();
+            App::error();
         }
         
         $blog = new Blog($id);
@@ -65,23 +65,24 @@ class BlogController {
     
     private function saveBlogMass() {
         if (!Autorisation::i()->isLogin()) {
-            App::error404();
+            App::error();
         }
         
         $blog = new Blog();
         $blog->parseHttpRequest();
-        $blog->save();
-        
-        $info = new PageInfo();
-        $info->page_title = 'Сообщение сохранено';
-        $info->info_mass = 'Поздравляем ^_^ ваше сообщение было успешно сохранено в системе =)';
-        
-        MainDecorator::i()->addContent($info);
+        if ($blog->save()) {
+
+            $info = new PageInfo();
+            $info->page_title = 'Сообщение сохранено';
+            $info->info_mass = 'Поздравляем ^_^ ваше сообщение было успешно сохранено в системе =)';
+
+            MainDecorator::i()->addContent($info);
+        }
     }
     
     private function showBlog($id = 0) {
         if ($id == 0) {
-            App::error404();
+            App::error();
         }
         
         $blog = new Blog($id);

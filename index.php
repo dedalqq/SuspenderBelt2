@@ -13,7 +13,7 @@ elseif (App::getCurrentCategory(1) == 'blogs') {
     BlogController::init();
 }
 else {
-    app::error404();
+    app::error();
 }
 
 App::getMainDecorator()->rander();

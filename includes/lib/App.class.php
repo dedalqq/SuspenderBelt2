@@ -10,6 +10,12 @@ class App {
     private static $url_request;
 
     private static $start_script;
+    
+    /**
+     *
+     * @var TopMenu
+     */
+    public static $top_menu;
 
     public static function init() {
             
@@ -34,6 +40,8 @@ class App {
         self::requestHandler();
         
         Autorisation::i();
+        
+        self::setTopMenu();
     }
 
     public static function requestHandler() {
@@ -50,6 +58,17 @@ class App {
         return microtime(true) - self::$start_script;
     }
     
+    private static function setTopMenu() {
+        self::$top_menu = new TopMenu;
+        self::$top_menu->left_itms = array(
+            '/blogs' => 'Блог',
+            '/ppc' => 'ппц'
+        );
+        
+        MainDecorator::i()->addContent(self::$top_menu, 'top_menu');
+    }
+
+
     public static function getCurrentCategory($i) {
         if (isset(self::$url_request[(int)$i])) {
             return self::$url_request[(int)$i];
@@ -92,15 +111,23 @@ class App {
         return MainDecorator::i();
     }
     
-    public static function error404() {
+    public static function error($error = '404') {
         $info = new PageInfo();
         $info->setError();
-        $info->page_title = 'Ошибка 404.';
-        $info->info_mass = 'Мы приносим вам глубочайшие извинения, но к сожалению данная страница не найдена Т_Т.';
-        MainDecorator::i()->addContent($info);
         
-        App::getMainDecorator()->rander();
-        exit();
+        if ($error == '404') {
+            $info->page_title = 'Ошибка 404.';
+            $info->info_mass = 'Мы приносим вам глубочайшие извинения, но к сожалению данная страница не найдена Т_Т.';
+            MainDecorator::i()->addContent($info);
+        
+            App::getMainDecorator()->rander();
+            exit();
+        }
+        else {
+            $info->page_title = 'Ошибка';
+            $info->info_mass = $error;
+            MainDecorator::i()->addContent($info);
+        }
     }
 
     /**

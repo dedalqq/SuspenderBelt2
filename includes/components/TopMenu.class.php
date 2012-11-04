@@ -25,9 +25,10 @@ class TopMenu extends PageElement {
             $this->bloks['menu_itm'] = count($this->left_itms)-1;
         }
         
-        $this->menu_itm_mod = '11';
-        $this->menu_itm_text = 'sdfgs';
-        
+        $data = each($this->left_itms);
+        $this->menu_itm_mod = $data[0];
+        $this->menu_itm_text = $data[1];
+
         $this->loadTpl();
 
         $html = '';

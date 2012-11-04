@@ -80,12 +80,6 @@ class MainDecorator extends PageElement {
 
         $this->encoding = $GLOBALS['config']['encoding'];
         
-        $top_menu = new TopMenu;
-        $top_menu->left_itms = array(
-            'omg' => 'омг',
-            'ppc' => 'ппц'
-        );
-        $this->addContent($top_menu, 'top_menu');
         $this->content = $this->error_mass.$this->content;
         
         echo parent::rander();
