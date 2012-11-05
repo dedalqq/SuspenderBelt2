@@ -80,7 +80,7 @@ class MainDecorator extends PageElement {
 
         $this->encoding = $GLOBALS['config']['encoding'];
         
-        $this->content = $this->error_mass.$this->content;
+        $this->content = App::breadcrumb().$this->error_mass.$this->content;
         
         echo parent::rander();
         echo "\n".'<!-- done: ' . App::getRuningTime() . ' -->';

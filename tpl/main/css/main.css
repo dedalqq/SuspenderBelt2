@@ -268,3 +268,14 @@ table.dialog {
     width: 100%;
     height: 80px;
 }
+
+
+.breadcrumb {
+    padding: 8px;
+    font-size: 9pt;
+}
+
+.breadcrumb a {
+    color: #666666;
+    padding: 5px;
+}

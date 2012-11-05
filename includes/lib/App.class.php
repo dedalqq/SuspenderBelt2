@@ -16,6 +16,12 @@ class App {
      * @var TopMenu
      */
     public static $top_menu;
+    
+    /**
+     *
+     * @var Breadcrumb
+     */
+    private static $breadcrumb;
 
     public static function init() {
             
@@ -42,6 +48,8 @@ class App {
         Autorisation::i();
         
         self::setTopMenu();
+        
+        self::$breadcrumb = new Breadcrumb();
     }
 
     public static function requestHandler() {
@@ -50,11 +58,15 @@ class App {
             unset(self::$url_request[0]);
         }
         else {
-            self::$url_request = array();
+            self::$url_request = array(1 => 'blogs');
         }
     }
     
-    public static function getRuningTime() {
+    public static function breadcrumb() {
+        return self::$breadcrumb;
+    }
+
+        public static function getRuningTime() {
         return microtime(true) - self::$start_script;
     }
     

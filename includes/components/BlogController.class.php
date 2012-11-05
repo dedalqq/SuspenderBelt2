@@ -12,6 +12,9 @@ class BlogController {
     private static $instance;
     
     private function __construct() {
+        
+        App::breadcrumb()->add('blogs', 'Блоги');
+        
         if (App::getCurrentCategory(2) == '') {
             $this->showBlogList();
         }
