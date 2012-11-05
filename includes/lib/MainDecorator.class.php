@@ -76,7 +76,7 @@ class MainDecorator extends PageElement {
         }
     }
 
-    public function rander() {
+    public function rander($tpl_name = '') {
 
         $this->encoding = $GLOBALS['config']['encoding'];
         
