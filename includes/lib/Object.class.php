@@ -14,7 +14,7 @@ abstract class Object {
      * Данные
      * @var array
      */
-    public $data;
+    public $data = array();
 
     /**
      * Свойства
@@ -23,7 +23,7 @@ abstract class Object {
     protected $properties = array();
 
     public function __construct() {
-        $this->data = array();
+        
     }
 
     public function __set($name, $value) {

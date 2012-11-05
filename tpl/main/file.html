@@ -1,0 +1,26 @@
+<!-- VIEW main -->
+<div class="file_preview">
+    <div>
+        <img src="{{file_url}}" />
+    </div>
+    <div>
+        <span>{{name}}</span><br>
+        <span class="file_info">{{user:login}}</span><br>
+        <span class="file_info">{{file_size}}</span><br>
+        <span class="file_info">{{file_date_create}}</span><br>
+    </div>
+    <input type="hidden" name="file_id[]" value="{{id}}" />
+</div>
+
+
+<!-- VIEW form -->
+
+    <form action="" target="frame" method="post" class="a_mode_on" enctype="multipart/form-data">
+        <input type="hidden" name="file_form" value="frame" />
+        <input type="hidden" name="group_id" value="{{group_id}}" />
+        <input type="file" class="file_input" name="file[]" {{multiple}} />
+    </form>
+    <iframe name="frame" style="display: none;"></iframe>
+    <script>
+        initUploadFile();
+    </script>

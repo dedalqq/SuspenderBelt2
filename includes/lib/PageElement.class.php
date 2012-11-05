@@ -39,7 +39,6 @@ abstract class PageElement extends Object {
     public abstract function getTplFileName();
 
     public function __construct() {
-        parent::__construct();
         $this->setTplName();
     }
 

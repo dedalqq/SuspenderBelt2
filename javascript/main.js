@@ -91,13 +91,13 @@ function initUploadFile() {
         });
 }
 
-function updateFile(file_id, form_id) {
+function updateFile(file_id) {
     $.ajax({
         type: "POST",
         cache: false,
         data: {get_preview: 1, file_id: file_id},
-        url: "handler.php"
+        url: ""
         }).done(function(data) {
-            $("#"+form_id).html(data);
+            $("#frame").html(data);
         });
 }

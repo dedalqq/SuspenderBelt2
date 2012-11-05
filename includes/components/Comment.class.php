@@ -6,14 +6,14 @@
  * 
  * @property int $user_id ид пользователя создавшего сообщение
  * @property int $modif_by ид пользователя который последним редактировал сообщение
- * @property string $title Заголовок сообщения
+ * @property int $object тип объекта
+ * @property int $object_id ид объекта
  * @property string $text Исходный текст сообщения
  * @property string $html_text Текст сообщения для отображения
  */
-class Blog extends DataBasePageElement {
+class Comment extends DataBasePageElement {
     
     /**
-     *
      * @var User
      */
     protected $user;
@@ -21,7 +21,8 @@ class Blog extends DataBasePageElement {
     protected $properties = array(
         'user_id' => self::INT,
         'modif_by' => self::INT,
-        'title' => self::STRING,
+        'object' => self::INT,
+        'object_id' => self::INT,
         'text' => self::STRING,
         'html_text' => self::STRING
     );
@@ -49,8 +50,8 @@ class Blog extends DataBasePageElement {
     protected function beforeSave() {
         parent::beforeSave();
 
-        if ($this->text == '' || $this->title == '') {
-            App::error('Нельзя сохранить сообщение без текста или без заголовка =Р');
+        if ($this->text == '') {
+            App::error('Нельзя сохранить сообщение без текста =Р');
             return false;
         }
         
@@ -67,38 +68,13 @@ class Blog extends DataBasePageElement {
     }
 
     protected function getTableName() {
-        return 'blogs';
+        return 'comments';
     }
 
     public function getTplFileName() {
-        return 'blog';
+        return 'comment';
     }
     
-    public function rander($tpl_name = '') {
-        if ($this->tpl_name == 'blog_form') {
-            if ($this->id == 0) {
-                $this->values['editor_mod'] = 'Создать новое сообщение';
-            }
-            else {
-                $this->values['editor_mod'] = 'Редактировать сообщение';
-            }
-        }
-        
-        $block = new ContentBlock();
-        
-        $this->data['date_create'] = Date::format($this->date_create);
-        $block->content = parent::rander();
-        
-        $html = (string)$block;
-        
-        while ($this->fetch()) {
-            $this->data['date_create'] = Date::format($this->date_create);
-            $block->content = parent::rander();
-            $html.= $block;
-        }
-        
-        return $html;
-    }
 }
 
 ?>

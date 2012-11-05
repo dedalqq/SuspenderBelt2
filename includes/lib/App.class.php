@@ -62,7 +62,8 @@ class App {
         self::$top_menu = new TopMenu;
         self::$top_menu->left_itms = array(
             '/blogs' => 'Блог',
-            '/ppc' => 'ппц'
+            '/ppc' => 'ппц',
+            '/my_files' => 'файлы'
         );
         
         MainDecorator::i()->addContent(self::$top_menu, 'top_menu');
@@ -81,10 +82,10 @@ class App {
     
     public static function getPageId() {
         if (self::$url_request[count(self::$url_request)] != '') {
-            return self::$url_request[count(self::$url_request)];
+            return (int)self::$url_request[count(self::$url_request)];
         }
         else {
-            return self::$url_request[count(self::$url_request)-1];
+            return (int)self::$url_request[count(self::$url_request)-1];
         }
     }
 

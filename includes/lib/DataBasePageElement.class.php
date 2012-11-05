@@ -5,6 +5,8 @@
  *
  * @author t.kovalev
  * 
+ * protected $properties = array();
+ * 
  * @todo проверить грамотность
  * @property int $id id объекта
  * @property int $date_create Дата создания
@@ -46,7 +48,9 @@ abstract class DataBasePageElement extends PageElement {
         $this->properties['date_create'] = self::INT;
         $this->properties['date_modif'] = self::INT;
         
-        $this->id = $id;
+        if ($id > 0) {
+            $this->id = $id;
+        }
         
         if ($this->id != 0) {
             $this->load();
@@ -91,6 +95,14 @@ abstract class DataBasePageElement extends PageElement {
         return true;
     }
     
+    /**
+     * Возвращает число элементов которые удалось загрузить
+     * @return int
+     */
+    public function getCount() {
+        return (int)$this->current_elements;
+    }
+
     protected function beforeSave() {
         if ($this->id == 0) {
             $this->date_create = Date::now();
@@ -108,14 +120,24 @@ abstract class DataBasePageElement extends PageElement {
         }
         
         if ($this->id == 0) {
-            $this->sql->db_insert($this->getTableName(), $this->getData());
+            $this->id = $this->sql->db_insert($this->getTableName(), $this->getData());
         }
         elseif ($this->id > 0) {
             $this->sql->db_update($this->getTableName(), $this->getData(), '`id`='.$this->id);
         }
         
-        return true;
-    }    
+        return $this->id;
+    }
+    
+    public function rander($tpl_name = '') {
+        $html = parent::rander($tpl_name);
+        if ($this->rander_all_elements) {
+            while ($this->fetch()) {
+                $html.= parent::rander($tpl_name);
+            }
+        }
+        return $html;
+    }
 }
     
 ?>

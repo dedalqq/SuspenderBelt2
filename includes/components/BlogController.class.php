@@ -38,7 +38,6 @@ class BlogController {
     private function showBlogList() {
         $blogs = new Blog();
         $blogs->load();
-        $blogs->randerAll();
         
         if (Autorisation::i()->isLogin()) {
             $button = PageElement::getButton('/blogs/add', 'Добавить');
@@ -87,6 +86,8 @@ class BlogController {
         
         $blog = new Blog($id);
         MainDecorator::i()->addContent($blog);
+        
+        CommentsController::init(CommentsController::BLOG, $id);
     }
 }
 

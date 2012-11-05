@@ -87,8 +87,8 @@ div.logo_img {
 
 div.main_content {
     float: left;
-    width: 100%;
-    padding-top: 120px;
+    width: 1000px;
+    padding: 115px 0px 0px 12px;
 }
 
 div.content {
@@ -247,4 +247,24 @@ table.dialog {
 
 .file_preview .file_info {
     color: #AAAAAA;
+}
+
+.comment {
+    padding: 4px 10px 6px 10px;
+
+}
+
+.comment hr {
+    margin: 5px;
+    padding: 0px;
+}
+
+.comment p {
+    padding: 0px;
+    margin: 0px;
+}
+
+.comment textarea {
+    width: 100%;
+    height: 80px;
 }
