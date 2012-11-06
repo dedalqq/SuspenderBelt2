@@ -75,7 +75,8 @@ class App {
         self::$top_menu->left_itms = array(
             '/blogs' => 'Блог',
             '/ppc' => 'ппц',
-            '/my_files' => 'файлы'
+            '/my_files' => 'файлы',
+            '/profile' => 'Профиль'
         );
         
         MainDecorator::i()->addContent(self::$top_menu, 'top_menu');

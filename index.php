@@ -12,9 +12,13 @@ if (App::getCurrentCategory(1) == 'autorisation') {
 elseif (App::getCurrentCategory(1) == 'blogs') {
     BlogController::init();
 }
+elseif (App::getCurrentCategory(1) == 'profile') {
+    Profile::init();
+}
 elseif (App::getCurrentCategory(1) == 'my_files') {
     
     $file = new File(0, true);
+    $file->UploadFile();
     MainDecorator::i()->addContent($file);
     
 }

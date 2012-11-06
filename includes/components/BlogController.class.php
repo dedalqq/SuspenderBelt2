@@ -13,7 +13,7 @@ class BlogController {
     
     private function __construct() {
         
-        App::breadcrumb()->add('blogs', 'Блоги');
+        App::breadcrumb()->add('/blogs', 'Блоги');
         
         if (App::getCurrentCategory(2) == '') {
             $this->showBlogList();

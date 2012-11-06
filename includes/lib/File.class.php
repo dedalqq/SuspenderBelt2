@@ -4,17 +4,19 @@
  *
  * @author dedal.qq
  * 
- * @property-read string $name Description
- * @property-read string $type Description
- * @property-read int $user_id Description
- * @property-read int $group_id Description
- * @property-read int $size Description
- * @property-read int $download_num Description
+ * @property string $name Description
+ * @property string $saved_name Description
+ * @property string $type Description
+ * @property int $user_id Description
+ * @property int $group_id Description
+ * @property int $size Description
+ * @property int $download_num Description
  */
 class File extends DataBasePageElement {
 
     protected $properties = array(
         'name' => self::STRING,
+        'saved_name' => self::STRING,
         'type' => self::STRING,
         'user_id' => self::INT,
         'group_id' => self::INT,
@@ -24,6 +26,7 @@ class File extends DataBasePageElement {
 
     private $multiple;
     private $can_edit;
+    private $can_use_imagick = array('image/jpeg', 'image/png');
     
     /**
      *
@@ -47,7 +50,7 @@ class File extends DataBasePageElement {
         
         $this->loadById($id);
         
-        $this->UploadFile();
+        //$this->UploadFile();
     }
     
     public function updateComposition() {
@@ -81,7 +84,13 @@ class File extends DataBasePageElement {
         return true;
     }
 
-    private function UploadFile() {
+    /**
+     * 
+     * @param DataBasePageElement $object
+     * @param string $fild
+     * @return boolean
+     */
+    public function UploadFile($object = null, $fild = 'file_id') {
         if (!isset($_FILES['file'])) {
             return false;
         }
@@ -89,9 +98,11 @@ class File extends DataBasePageElement {
         $file_num = count($_FILES['file']['name']);
         for($i=0; $i<$file_num; $i++) {
 
+            $new_file_name = md5($_FILES['file']['name'][$i].'_'.Date::now());
+            
             if (!move_uploaded_file(
                     $_FILES['file']['tmp_name'][$i],
-                    $GLOBALS['config']['file_storage'].$_FILES['file']['name'][$i].'_'.Date::now())
+                    $GLOBALS['config']['file_storage'].$new_file_name)
             ) {
                 continue;
             }
@@ -102,14 +113,15 @@ class File extends DataBasePageElement {
             }
             
             if (!$this->multiple) {
-                unlink($GLOBALS['config']['file_storage'].$this->data['name'].'_'.$this->data['date_create']);
+                unlink($GLOBALS['config']['file_storage'].$this->data['name']);
             }
             
-            $this->data['name'] = (string)$_FILES['file']['name'][$i];
-            $this->data['size'] = (int)$_FILES['file']['size'][$i];
-            $this->data['type'] = (string)$_FILES['file']['type'][$i];
-            $this->data['date_create'] = Date::now();
-            $this->data['user_id'] = Autorisation::i()->getUser()->id;
+            $this->saved_name = $new_file_name;
+            $this->name = $_FILES['file']['name'][$i];
+            $this->size = $_FILES['file']['size'][$i];
+            $this->type = $_FILES['file']['type'][$i];
+            $this->date_create = Date::now();
+            $this->user_id = Autorisation::i()->getUser()->id;
             
             if ($this->multiple) {
                 $this->id = 0;
@@ -125,8 +137,15 @@ class File extends DataBasePageElement {
                 $this->save();
                 $return_file_id = $this->group_id;
             }
+            
+            /////////////////
+            //$this->reSize(100);
         }
         
+        if ($object != null) {
+            $object->data[$fild] = $return_file_id;
+            $object->save();
+        }
         echo "<script>
                 window.parent.updateFile(".$return_file_id.");
             </script>";
@@ -177,6 +196,28 @@ class File extends DataBasePageElement {
         return $html;
     }
     
+    public function reSize($height) {
+        
+        if (!empty($this->data['name']) && in_array($this->type, $this->can_use_imagick)) {
+            
+            $image = new Imagick($GLOBALS['config']['file_storage'].$this->saved_name);
+            $imageprops = $image->getImageGeometry();
+
+            if ($imageprops['height'] > $height) {
+                $width = $imageprops['width']/$imageprops['height']*$height;
+                $image->resizeImage($width, $height, imagick::FILTER_LANCZOS, 0.9, true);
+                
+                if ($fe = fopen($GLOBALS['config']['file_storage'].$this->saved_name, 'w')) {
+                    fwrite($fp, (string)$image);
+                    fclose($fe);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     /**
      * Возвращает сам фаил
      * @param type $download
@@ -185,17 +226,15 @@ class File extends DataBasePageElement {
         
         $attach = $download ? ' attachment;' : '';
         
-        $typs_for_preview = array('image/jpeg', 'image/png');
-        
         if (!empty($this->data['name'])) {
        
             header('Content-type: '.$this->name);
             header('Content-Disposition:'.$attach.' filename="'.$this->name.'"');
             
-            if (!empty($_GET['preview']) && in_array($this->type, $typs_for_preview)) {
+            if (!empty($_GET['preview']) && in_array($this->type, $this->can_use_imagick)) {
                 
                 $height = (int)$_GET['preview'];
-                $image = new Imagick($GLOBALS['config']['file_storage'].$this->name.'_'.$this->date_create);
+                $image = new Imagick($GLOBALS['config']['file_storage'].$this->saved_name);
                 $imageprops = $image->getImageGeometry();
                 
                 if ($imageprops['height'] > $height) {
@@ -212,8 +251,8 @@ class File extends DataBasePageElement {
                 $this->save();
                 exit();
             }
-            elseif ($fe = fopen($GLOBALS['config']['file_storage'].$this->data['name'].'_'.$this->data['date_create'], 'r')) {
-                header('Content-length: '.$this->data['size']);
+            elseif ($fe = fopen($GLOBALS['config']['file_storage'].$this->saved_name, 'r')) {
+                header('Content-length: '.$this->size);
                 while(!feof($fe)) {
                     $content = fgets($fe);
                     echo $content;

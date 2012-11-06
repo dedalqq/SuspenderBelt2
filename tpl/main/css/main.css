@@ -236,7 +236,6 @@ table.dialog {
 .file_preview {
     float: left;
     margin: 2px;
-    height: 182px;
 }
 
 .file_preview img {
@@ -247,6 +246,7 @@ table.dialog {
 
 .file_preview .file_info {
     color: #AAAAAA;
+    word-break:break-all;
 }
 
 .comment {
