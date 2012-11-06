@@ -279,3 +279,11 @@ table.dialog {
     color: #666666;
     padding: 5px;
 }
+
+
+.avatar {
+    border: solid 1px #999;
+    padding: 5px;
+    float: left;
+    margin-right: 10px;
+}
