@@ -1,8 +1,20 @@
 <!-- VIEW main -->
 <div class="file_preview">
     <div>
-        <img src="{{file_url}}" />
+        <img src="{{file_url}}" rel="#photo{{id}}" />
     </div>
+	
+	<div class="overlay black" id="photo{{id}}">
+		<img src="{{file_ur_original}}" />
+			
+		<div class="details">
+			<h2>{{title}}</h2>
+			<p>
+				{{description}}
+			</p>
+		</div>
+	</div>
+	
     <div>
         <span>{{name}}</span><br>
         <span class="file_info">{{user:login}}</span><br>
