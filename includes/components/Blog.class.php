@@ -61,7 +61,14 @@ class Blog extends DataBasePageElement {
             $this->modif_by = Autorisation::i()->getUser()->id;
         }
         
-        $this->html_text = $this->text;
+        require_once("plugins/nbbc.php");
+	
+	$input = $this->text;
+	
+	$bbcode = new BBCode;
+        $bbcode->SetDetectURLs(true);
+	$output = $bbcode->Parse($input);
+        $this->html_text = $output;
         
         return true;
     }
