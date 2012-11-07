@@ -56,7 +56,7 @@ class File extends DataBasePageElement {
     public function updateComposition() {
         $this->user = new User($this->user_id);
         $this->values['file_url'] = $this->getUrl(false, 100);
-        $this->values['file_ur_original'] = $this->getUrl();
+        $this->values['file_ur_original'] = $this->getUrl(false, 600);
         $this->values['file_date_create'] = Date::format($this->date_create);
         $this->values['file_size'] = App::bytFormat($this->size);
     }

@@ -302,15 +302,13 @@ table.dialog {
     box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
 
-.apple_overlay {
+.overlay {
     display:none;
-    background-image:url(/media/img/overlay/white.png);
-    width:640px;
     padding:35px;
     font-size:11px;
 }
  
-.apple_overlay .close {
+.overlay .close {
     background-image:url(/tpl/main/img/close.png);
     position:absolute; right:5px; top:5px;
     cursor:pointer;
@@ -318,7 +316,3 @@ table.dialog {
     width:35px;
 }
 
-div.apple_overlay.black {
-	background-image:url(/media/img/overlay/transparent.png);
-	color:#fff;
-}
