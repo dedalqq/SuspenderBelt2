@@ -180,21 +180,17 @@ class File extends DataBasePageElement {
     
     public function rander($tpl_name = '') {
         
-        $html = '<div id="frame">';
-        
         if ($this->getCount()) {
-            $html.= parent::rander('main');
+            $html = parent::rander('main');
         }
         
         if ($this->can_edit) {
             $this->values['multiple'] = $this->multiple ? 'multiple' : '';
             $this->randerAll(false);
-            $html.= parent::rander('form');
+            $html = parent::rander('form').$html;
         }
-        
-        $html.= '</div>';
-        
-        return $html;
+
+        return '<div id="frame">'.$html.'</div>';
     }
     
     public function reSize($height) {

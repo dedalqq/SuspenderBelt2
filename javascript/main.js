@@ -101,3 +101,21 @@ function updateFile(file_id) {
             $("#frame").html(data);
         });
 }
+
+function initTagControl() {
+    $('#tag_input').keypress(function() {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/tags/",
+            data: { tag: $(this).val()}
+                }).done(function( msg ) {
+                  $('#select_list').html(msg);
+                });
+    });
+}
+
+function add_tag(name) {
+    var html = '<div class="added_tag"><input type="hidden" name="tag[]">'+name+'</div>';
+    $('#tag_list').append(html);
+}

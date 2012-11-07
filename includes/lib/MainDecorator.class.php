@@ -77,7 +77,9 @@ class MainDecorator extends PageElement {
     }
 
     public function rander($tpl_name = '') {
-
+        
+        header('Content-Type: text/html; charset='.$GLOBALS['config']['encoding']);
+        
         $this->encoding = $GLOBALS['config']['encoding'];
         
         $this->content = App::breadcrumb().$this->error_mass.$this->content;

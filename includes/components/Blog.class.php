@@ -89,6 +89,9 @@ class Blog extends DataBasePageElement {
             else {
                 $this->values['editor_mod'] = 'Редактировать сообщение';
             }
+            
+            //$tags = new TagControl();
+            //$this->values['tag_control'] = $tags;
         }
         
         $block = new ContentBlock();

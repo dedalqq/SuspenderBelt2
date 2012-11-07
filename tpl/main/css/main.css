@@ -115,6 +115,10 @@ div.left_menu h3 {
     color: gray;
 }
 
+.block {
+    width: 100%;
+}
+
 .block .center {
     background-color: #FFFFFF;
 }
@@ -240,7 +244,7 @@ table.dialog {
     margin: 2px;
 }
 
-.file_preview img {
+.file_preview > div > img {
     border: solid 1px #CCC;
     padding: 5px;
     background-color: white;
@@ -304,7 +308,6 @@ table.dialog {
 
 .overlay {
     display:none;
-    padding:35px;
     font-size:11px;
 }
  
@@ -316,3 +319,33 @@ table.dialog {
     width:35px;
 }
 
+.file_input {
+    padding: 30px;
+    width: 80%;
+    border: solid 1px #CCC;
+    background-color: whiteSmoke;
+}
+
+.tag_control {
+    border: solid 1px #CCC;
+    padding: 3px;
+}
+
+.tag_control input {
+    border: 0px;
+    width: auto;
+}
+
+.tag_control .select_list {
+    border: solid 1px #CCC;
+    position: absolute;
+    width: 200px;
+    background-color: #FFFFFF;
+}
+
+.added_tag {
+    float: left;
+    margin: 1px;
+    background-color: #78BDEB;
+    padding: 4px;
+}

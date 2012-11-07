@@ -17,6 +17,10 @@ elseif (App::getCurrentCategory(1) == 'profile') {
 }
 elseif (App::getCurrentCategory(1) == 'my_files') {
     
+    if (!Autorisation::i()->isLogin()) {
+        return false;
+    }
+    
     $file = new File(0, true);
     $file->load('user_id='.Autorisation::i()->getUser()->id);
     MainDecorator::i()->addContent($file->getStatus());
@@ -37,6 +41,9 @@ elseif (App::getCurrentCategory(1) == 'file') {
     elseif (App::getCurrentCategory(2) == 'get') {
         $file->getFileContent();
     }
+}
+elseif (App::getCurrentCategory(1) == 'tags') {
+    TagControl::getTagsList();
 }
 else {
     app::error();
