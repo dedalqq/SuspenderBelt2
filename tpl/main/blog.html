@@ -1,11 +1,17 @@
 <!-- VIEW main -->
-<b>Тема:</b> <a href="/blogs/show/{{id}}">{{title}}</a> ({{user:login}})
+<b>Тема:</b> <a href="/blogs/show/{{id}}">{{title}}</a>
 <div style="float: right;"><span class="date">{{date_create}}</span>
 <!-- BEGIN can_edit -->
     [<a href="/blogs/edit/{{id}}">Редактировать</a>]
 <!-- END can_edit -->
 </div> <hr>
-<img class="avatar" src="/file/get/{{user:avatar_id}}?preview=100" /><p>{{html_text}}</p>
+<div class="avatar">
+    <span>{{user:login}}</span>
+    <img src="/file/get/{{user:avatar_id}}?preview=100" />
+    <span><b>Посты</b>: {{user:num_posts}}</span><br>
+    <span><b>комментарии</b>: {{user:num_comments}}</span>
+</div>
+<p>{{html_text}}</p>
 
 <!-- VIEW blog_form -->
 <h2>{{editor_mod}}</h2>

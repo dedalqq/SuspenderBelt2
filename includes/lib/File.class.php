@@ -182,7 +182,7 @@ class File extends DataBasePageElement {
         $html = '<div id="frame">';
         
         if ($this->getCount()) {
-            $html.= parent::rander();
+            $html.= parent::rander('main');
         }
         
         if ($this->can_edit) {
@@ -216,7 +216,13 @@ class File extends DataBasePageElement {
         }
         return false;
     }
-
+    
+    public function getStatus() {
+        $bloc = new ContentBlock();
+        $this->values['count_file'] = $this->getCount();
+        $bloc->values['content'] = parent::rander('status');
+        return $bloc->rander();
+    }
 
     /**
      * Возвращает сам фаил

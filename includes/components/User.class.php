@@ -12,6 +12,9 @@
  * @property string $last_name
  * @property string $mid_name
  * 
+ * @property int $num_comments Description
+ * @property int $num_posts Description
+ * 
  */
 class User extends DataBasePageElement {
     
@@ -21,7 +24,9 @@ class User extends DataBasePageElement {
         'avatar_id' => self::INT,
         'first_name' => self::STRING,
         'last_name' => self::STRING,
-        'mid_name' => self::STRING
+        'mid_name' => self::STRING,
+        'num_comments' => self::INT,
+        'num_posts' => self::INT,
     );
 
     public function __construct($id = 0) {

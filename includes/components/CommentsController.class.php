@@ -33,6 +33,10 @@ class CommentsController {
         if (isset($_POST['save'])) {
             $comment = new Comment();
             $comment->parseHttpRequest();
+            if ($comment->id == 0) {
+                Autorisation::i()->getUser()->num_comments++;
+                Autorisation::i()->getUser()->save();
+            }
             $comment->save();
         }
         

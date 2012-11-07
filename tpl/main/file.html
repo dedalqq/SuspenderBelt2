@@ -14,7 +14,6 @@
 
 
 <!-- VIEW form -->
-
     <form action="" target="frame" method="post" class="a_mode_on" enctype="multipart/form-data">
         <input type="hidden" name="file_form" value="frame" />
         <input type="hidden" name="group_id" value="{{group_id}}" />
@@ -24,3 +23,7 @@
     <script>
         initUploadFile();
     </script>
+
+<!-- VIEW status -->
+<b>Всего ваших файлов</b>: {{count_file}}<br>
+<b>На общую сумму</b>: {{all_size}}<br>

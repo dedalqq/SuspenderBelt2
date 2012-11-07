@@ -18,6 +18,9 @@ elseif (App::getCurrentCategory(1) == 'profile') {
 elseif (App::getCurrentCategory(1) == 'my_files') {
     
     $file = new File(0, true);
+    $file->load('user_id='.Autorisation::i()->getUser()->id);
+    MainDecorator::i()->addContent($file->getStatus());
+    $file->randerAll();
     $file->UploadFile();
     MainDecorator::i()->addContent($file);
     

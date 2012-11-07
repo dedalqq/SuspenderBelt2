@@ -235,6 +235,8 @@ table.dialog {
 
 .file_preview {
     float: left;
+    width: 230px;
+    height: 200px;
     margin: 2px;
 }
 
@@ -280,11 +282,21 @@ table.dialog {
     padding: 5px;
 }
 
-
 .avatar {
+    width: 120px;
+    float: left;
+    padding: 2px;
+    border-right: 1px solid #CCC;
+    margin-right: 10px;
+}
+
+.avatar span {
+    margin-bottom: 4px;
+}
+
+.avatar img {
     border: solid 1px #999;
     padding: 5px;
-    float: left;
     margin-right: 10px;
     
     box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;

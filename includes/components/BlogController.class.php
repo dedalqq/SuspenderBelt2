@@ -72,8 +72,12 @@ class BlogController {
         
         $blog = new Blog();
         $blog->parseHttpRequest();
+        if ($blog->id == 0) {
+            Autorisation::i()->getUser()->num_posts++;
+            Autorisation::i()->getUser()->save();
+        }
         if ($blog->save()) {
-
+            
             $info = new PageInfo();
             $info->page_title = 'Сообщение сохранено';
             $info->info_mass = 'Поздравляем ^_^ ваше сообщение было успешно сохранено в системе =)';

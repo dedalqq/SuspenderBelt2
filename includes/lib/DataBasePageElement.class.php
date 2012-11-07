@@ -100,7 +100,7 @@ abstract class DataBasePageElement extends PageElement {
      * @return int
      */
     public function getCount() {
-        return (int)$this->current_elements;
+        return (int)$this->num_elements;
     }
 
     protected function beforeSave() {
