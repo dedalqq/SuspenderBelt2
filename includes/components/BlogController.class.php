@@ -40,7 +40,10 @@ class BlogController {
     
     private function showBlogList() {
         $blogs = new Blog();
-        $blogs->load();
+        /**
+         * @todo Временно
+         */
+        $blogs->load('1 ORDER BY `date_create` DESC ');
         
         if (Autorisation::i()->isLogin()) {
             $button = PageElement::getButton('/blogs/add', 'Добавить');
