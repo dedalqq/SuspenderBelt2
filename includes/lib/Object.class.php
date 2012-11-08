@@ -9,6 +9,7 @@ abstract class Object {
 
     const STRING = 1;
     const INT = 2;
+    const TYPE_ARRAY = 3;
 
     /**
      * Данные
@@ -54,6 +55,14 @@ abstract class Object {
                 $this->data[$name] = intval($data[$name]);
             } elseif ($type == self::STRING) {
                 $this->data[$name] = strval($data[$name]);
+            } elseif ($type == self::TYPE_ARRAY) {
+                if (is_array($data[$name])) {
+                    $this->data[$name] = $data[$name];
+                } elseif (is_array($array = unserialize($data[$name]))) {
+                    $this->data[$name] = $array;
+                } else {
+                    $this->data[$name] = array();
+                }
             }
         }
         return true;

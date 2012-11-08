@@ -110,12 +110,25 @@ function initTagControl() {
             url: "/tags/",
             data: { tag: $(this).val()}
                 }).done(function( msg ) {
+                    if (msg != '') {
+                        $('#select_list').css('display', 'block');
+                    }
+                    else {
+                        $('#select_list').css('display', 'none');
+                    }
                   $('#select_list').html(msg);
                 });
     });
 }
 
+/**
+ * При удалении фокуса добавлять тег
+ * в списке ввсегда выводить по умолчанию выделленый тег что уже введен
+ * при енторе добавлять тег
+ * отслеживать ентор и добавлять тег при нажатии
+ */
+
 function add_tag(name) {
-    var html = '<div class="added_tag"><input type="hidden" name="tag[]">'+name+'</div>';
+    var html = '<div class="added_tag"><input type="hidden" name="tag[]"><span>'+name+'</span><img src="/tpl/main/img/rm.png"></div>';
     $('#tag_list').append(html);
 }

@@ -50,8 +50,11 @@ class MySQL {
      * @param string $string
      * @return string
      */
-    public static function stringHandler($string) {
-        return '\''.$string.'\'';
+    public static function stringHandler($value) {
+        if (is_array($value)) {
+            return '\''.serialize($value).'\'';
+        }
+        return '\''.$value.'\'';
     }
     
     public function getCount() {

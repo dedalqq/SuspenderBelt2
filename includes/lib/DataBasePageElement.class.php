@@ -74,9 +74,6 @@ abstract class DataBasePageElement extends PageElement {
         if ($this->num_elements > 0) {
             $this->current_elements = 0;
             $this->fetch();
-            if ($this instanceof User) {
-                //bug($this->login);
-            }
         }
         return false;
     }

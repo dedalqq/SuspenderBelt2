@@ -5,31 +5,63 @@
  *
  * @author dedal.qq
  * 
- * @property string $user_name
+ * @property int $id
+ * @property string $session_id Description
+ * @property int $user_id ид пользователя
+ * @property array $data Данные хранимые в сессии
+ * @property int $date_login Дата авторизации
+ * @property int $date_last_ping Дата последнего отклика от пользователя
+ * @property int $date_ping хз =) не помню =)
+ * 
  */
-class Autorisation extends PageElement {
+class Autorisation extends DataBasePageElement {
 
     private static $object = NULL;
 
     /**
      * @var User 
      */
-    private $user;
+    public $user;
     private $is_login;
-    
-    protected $properties = array(
-        'user_name' => self::STRING
-    );
 
     public function __construct() {
         
-        session_start();
-        parent::__construct();
+        parent::__construct(0);
+        
+        $this->properties = array(
+            'id' => self::INT,
+            'session_id' => self::STRING,
+            'user_id' => self::INT,
+            'data' => self::TYPE_ARRAY,
+            'date_login' => self::INT,
+            'date_last_ping' => self::INT,
+            'date_ping' => self::INT
+        );
+        
+        $this->user = new User();
+        
+        $cookie_name = '42qq';
+        $cookie_value = md5(Date::now().'_42qq');
+        $cookie_live = Date::now()+60*60*24+10;
+        
+        if (empty($_COOKIE[$cookie_name])) {
+            setcookie($cookie_name, $cookie_value, $cookie_live, '/');
+            $this->session_id = $cookie_value;
+        }
+        else {
+            $this->session_id = $_COOKIE[$cookie_name];
+            $this->load('`session_id`='.MySQL::stringHandler($this->session_id));
+        }
+        
         $this->getStatus();
     }
     
     public function getTplFileName() {
         return 'autorisation';
+    }
+    
+    protected function getTableName() {
+        return 'session';
     }
 
     public function getUser() {
@@ -66,8 +98,10 @@ class Autorisation extends PageElement {
             if ($this->user->id > 0) {
                 $page->info_mass = 'Вы успешно авторизировались!';
                 $page->setOk();
-
-                $_SESSION['auth']['user_id'] = $this->user->id;
+                
+                $this->user_id = $this->user->id;
+                $this->date_login = Date::now();
+                $this->save();
                 
                 MainDecorator::i()->addContent($this, 'form_login');
             } else {
@@ -75,7 +109,10 @@ class Autorisation extends PageElement {
                 $page->setError();
             }
         } elseif ($action == 'exit') {
-            $_SESSION['auth']['user_id'] = 0;
+            
+            $this->user_id = 0;
+            $this->save();
+            
             $page->info_mass = 'До скорой встречи!';
             $page->setOk();
             MainDecorator::i()->addContent($this, 'form_login');
@@ -87,20 +124,16 @@ class Autorisation extends PageElement {
         }
 
     public function getStatus() {
-        if (!isset($_SESSION['auth']['user_id'])) {
-            $_SESSION['auth']['user_id'] = false;
-        }
-
-        if ((bool)$_SESSION['auth']['user_id']) {
+        
+        if ((bool)$this->user_id) {
 
             $this->setBlock('auth_on');
             $this->setBlock('auth_off', false);
             
             $this->is_login = true;
 
-            $this->user = new User((int)$_SESSION['auth']['user_id']);
-
-            $this->user_name = $this->user->login;
+            $this->user = new User((int)$this->user_id);
+            
         } else {
             
             $this->setBlock('auth_on', false);

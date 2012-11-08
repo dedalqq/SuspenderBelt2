@@ -38,7 +38,9 @@ class TagControl extends DataBasePageElement {
             self::$object->randerAll();
             header('Content-Type: text/html; charset='.$GLOBALS['config']['encoding']);
             
-            echo self::$object->rander('list');
+            if (self::$object->getCount()) {
+                echo self::$object->rander('list');
+            }
             exit();
         }
     }
