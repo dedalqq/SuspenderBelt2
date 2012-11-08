@@ -3,6 +3,10 @@
  * Description of TagControl
  *
  * @author dedal.qq
+ * 
+ * @property string $name
+ * @property int $use_num
+ * @property int $date
  */
 class TagControl extends DataBasePageElement {
     
@@ -43,6 +47,28 @@ class TagControl extends DataBasePageElement {
             }
             exit();
         }
+    }
+    
+    /**
+     * @return array
+     */
+    public static function add() {
+        
+        $array = $_POST['tag'];
+        
+        $tag = new self;
+        
+        for($i=0; $i<count($array); $i++) {
+            $array[$i] = htmlspecialchars($array[$i]);
+            $tag->reset();
+            $tag->load('name='.MySQL::stringHandler($array[$i]));
+            if ($tag->id) {
+                $tag->data['use_num']++;
+                $tag->save();
+            }
+        }
+        
+        return $array;
     }
 }
 

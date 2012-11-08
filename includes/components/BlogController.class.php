@@ -75,6 +75,7 @@ class BlogController {
         
         $blog = new Blog();
         $blog->parseHttpRequest();
+        
         if ($blog->id == 0) {
             Autorisation::i()->getUser()->num_posts++;
             Autorisation::i()->getUser()->save();

@@ -61,7 +61,9 @@ class Comment extends DataBasePageElement {
         elseif ($this->id > 0) {
             $this->modif_by = Autorisation::i()->getUser()->id;
         }
-        
+        /**
+         * @todo Добавить парсиншг бб кода
+         */
         $this->html_text = $this->text;
         
         return true;
@@ -73,6 +75,17 @@ class Comment extends DataBasePageElement {
 
     public function getTplFileName() {
         return 'comment';
+    }
+    
+    public function rander($tpl_name = '') {
+        $block = new ContentBlock();
+        $block->content = parent::rander($tpl_name);
+        $html = $block->rander();
+        while ($this->fetch()) {
+            $block->content = parent::rander($tpl_name);
+            $html.= $block->rander();
+        }
+        return $html;
     }
     
 }

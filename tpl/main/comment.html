@@ -1,13 +1,17 @@
 <!-- VIEW main -->
-<div class="comment">
-  <img src="/file/get/{{user:avatar_id}}?preview=32" />  <span class="date">{{user:login}}</span>
+Комментарий:
 <div style="float: right;"><span class="date">{{date_create}}</span>
 <!-- BEGIN can_edit -->
-    <!--[<a href="/blogs/edit/{{id}}">Редактировать</a>]-->
+    [<a href="/blogs/edit/{{id}}">Редактировать</a>]
 <!-- END can_edit -->
 </div> <hr>
-<p>{{html_text}}</p>
+<div class="avatar">
+    <span>{{user:login}}</span>
+    <img src="/file/get/{{user:avatar_id}}?preview=100" />
+    <span><b>Посты</b>: {{user:num_posts}}</span><br>
+    <span><b>комментарии</b>: {{user:num_comments}}</span>
 </div>
+<p>{{html_text}}</p>
 
 <!-- VIEW form -->
 <div class="comment">

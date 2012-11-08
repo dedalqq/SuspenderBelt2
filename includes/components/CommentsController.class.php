@@ -42,7 +42,6 @@ class CommentsController {
         
         $comment = new Comment();
         $comment->load('object_id='.$this->object_id.' AND object='.$this->object);
-        $comment->randerAll();
         MainDecorator::i()->addContent($comment);
         
         

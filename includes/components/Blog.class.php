@@ -8,6 +8,7 @@
  * @property int $modif_by ид пользователя который последним редактировал сообщение
  * @property string $title Заголовок сообщения
  * @property string $text Исходный текст сообщения
+ * @property array $tags Список тэгов
  * @property string $html_text Текст сообщения для отображения
  */
 class Blog extends DataBasePageElement {
@@ -23,6 +24,7 @@ class Blog extends DataBasePageElement {
         'modif_by' => self::INT,
         'title' => self::STRING,
         'text' => self::STRING,
+        'tags' => self::TYPE_ARRAY,
         'html_text' => self::STRING
     );
     
@@ -69,6 +71,8 @@ class Blog extends DataBasePageElement {
         $bbcode->SetDetectURLs(true);
 	$output = $bbcode->Parse($input);
         $this->html_text = $output;
+        
+        $this->tags = TagControl::add();
         
         return true;
     }

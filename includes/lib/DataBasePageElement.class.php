@@ -62,6 +62,12 @@ abstract class DataBasePageElement extends PageElement {
     public function randerAll($value = true) {
         $this->rander_all_elements = $value;
     }
+    
+    public function reset() {
+        foreach ($this->properties as $i => $v) {
+            $this->data[$i] = null;
+        }
+    }
 
     public function load($where = '1') {
         if ($this->id > 0) {
