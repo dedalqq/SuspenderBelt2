@@ -129,6 +129,6 @@ function initTagControl() {
  */
 
 function add_tag(name) {
-    var html = '<div class="added_tag"><input type="hidden" name="tag[]"><span>'+name+'</span><img src="/tpl/main/img/rm.png"></div>';
+    var html = '<div class="added_tag"><input type="hidden" name="tag[]" value="'+name+'" /><span>'+name+'</span><img src="/tpl/main/img/rm.png"></div>';
     $('#tag_list').append(html);
 }

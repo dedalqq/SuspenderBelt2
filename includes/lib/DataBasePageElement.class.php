@@ -37,6 +37,13 @@ abstract class DataBasePageElement extends PageElement {
      */
     private $current_elements = 0;
     
+    /**
+     * Показывает, былали попытка выбрать данные из базы
+     * Тоесть был ли вызов метода load()
+     * @var bool
+     */
+    private $was_selected = false;
+
     protected $rander_all_elements = false;
 
     public function __construct($id = 0) {
@@ -76,6 +83,8 @@ abstract class DataBasePageElement extends PageElement {
         
         $this->sql_result = $this->sql->db_select($this->getTableName(), $where);
         $this->num_elements = $this->sql->getCountSelected();
+        
+        $this->was_selected = true;
         
         if ($this->num_elements > 0) {
             $this->current_elements = 0;
@@ -133,6 +142,9 @@ abstract class DataBasePageElement extends PageElement {
     }
     
     public function rander($tpl_name = '') {
+        if ($this->was_selected && $this->num_elements == 0) {
+            return '';
+        }
         $html = parent::rander($tpl_name);
         if ($this->rander_all_elements) {
             while ($this->fetch()) {
