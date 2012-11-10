@@ -105,7 +105,7 @@ class Autorisation extends DataBasePageElement {
                 $this->user_id = $this->user->id;
                 $this->date_login = Date::now();
                 $this->browser_info = $_SERVER['HTTP_USER_AGENT'];
-                $this->id = $_SERVER['REMOTE_ADDR'];
+                $this->ip = $_SERVER['REMOTE_ADDR'];
                 $this->save();
                 
                 MainDecorator::i()->addContent($this, 'form_login');

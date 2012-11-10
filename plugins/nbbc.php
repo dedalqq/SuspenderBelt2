@@ -1363,7 +1363,7 @@ class BBCode {
     }
 
     function GetDefaultSmileyDir() {
-        return "img/smileys";
+        return "/img/smileys";
     }
 
     function SetSmileyURL($path) {
@@ -1375,7 +1375,7 @@ class BBCode {
     }
 
     function GetDefaultSmileyURL() {
-        return "img/smileys";
+        return "/img/smileys";
     }
 
     function SetEnableSmileys($enable = true) {

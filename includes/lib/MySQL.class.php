@@ -59,7 +59,7 @@ class MySQL {
         if (is_array($value)) {
             return '\''.serialize($value).'\'';
         }
-        return '\''.$value.'\'';
+        return '\''.addslashes($value).'\'';
     }
     
     /**
@@ -172,7 +172,7 @@ class MySQL {
                 ('.join(',', $names).')
                 VALUES
                 ('.join(',', $values).');';
-
+        
         $this->mysqli->query($query);
         
         $this->sql_num_query++;
