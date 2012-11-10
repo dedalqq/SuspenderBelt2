@@ -10,6 +10,8 @@
  * @property int $user_id ид пользователя
  * @property array $ex_data Данные хранимые в сессии
  * @property int $date_login Дата авторизации
+ * @property string $ip ип
+ * @property string $browser_info Данные браузера
  * 
  */
 class Autorisation extends DataBasePageElement {
@@ -32,6 +34,8 @@ class Autorisation extends DataBasePageElement {
             'user_id' => self::INT,
             'ex_data' => self::TYPE_ARRAY,
             'date_login' => self::INT,
+            'ip' => self::STRING,
+            'browser_info' => self::STRING,
         );
         
         $this->user = new User();
@@ -100,7 +104,8 @@ class Autorisation extends DataBasePageElement {
                 
                 $this->user_id = $this->user->id;
                 $this->date_login = Date::now();
-                $this->user->date_last_ping = Date::now();
+                $this->browser_info = $_SERVER['HTTP_USER_AGENT'];
+                $this->id = $_SERVER['REMOTE_ADDR'];
                 $this->save();
                 
                 MainDecorator::i()->addContent($this, 'form_login');
