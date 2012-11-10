@@ -10,7 +10,7 @@ function bug($var, $stop = false) {
         echo '<pre>';
         var_dump($var);
         echo '</pre>';
-        exit;
+        //exit;
     } else {
         $info = new PageInfo();
         $info->page_title = 'Информация для дебага';

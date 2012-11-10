@@ -137,6 +137,9 @@ class App {
             App::getMainDecorator()->rander();
             exit();
         }
+        elseif ($error == '401') {
+            
+        }
         else {
             $info->page_title = 'Ошибка';
             $info->info_mass = $error;

@@ -6,6 +6,8 @@
 
 include 'includes/init.php';
 
+
+
 if (App::getCurrentCategory(1) == 'autorisation') {
     Autorisation::i()->controller();
 }
@@ -30,7 +32,6 @@ elseif (App::getCurrentCategory(1) == 'my_files') {
     
 }
 elseif (App::getCurrentCategory(1) == 'file') {
-    
     $file = new File(0, false);
     $file->id = (int)App::getPageId();
     $file->load();

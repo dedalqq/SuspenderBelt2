@@ -1,6 +1,6 @@
 <!-- VIEW main -->
 <b>Тема:</b> <a href="/blogs/show/{{id}}">{{title}}</a>
-<div style="float: right;"><span class="date">{{date_create}}</span>
+<div style="float: right;"><span class="date">{{date}}</span>
 <!-- BEGIN can_edit -->
     [<a href="/blogs/edit/{{id}}">Редактировать</a>]
 <!-- END can_edit -->
@@ -16,11 +16,21 @@
 <!-- VIEW blog_form -->
 <h2>{{editor_mod}}</h2>
 <div class="blog_form">
+    <script src="http://cdn.wysibb.com/js/jquery.wysibb-1.2.3.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.wysibb.com/css/default/wbbtheme.css" />
+    <script>
+        $(document).ready(function() {
+            var wbbOpt = {
+                buttons: "bold,italic,underline,|,img,link,|,quote"
+              }
+          $("#editor").wysibb(wbbOpt)
+        })
+    </script>
     <form action="/blogs/save/" method="POST">
         <input type="hidden" name="id" value="{{id}}" />
         <input type="hidden" name="save" value="1" />
         Тема: <input class="subject" type="text" name="title" value="{{title}}" /><br />
-        Текст сообщения:<br><textarea name="text">{{text}}</textarea><br />
+        Текст сообщения:<br><textarea name="text" id="editor">{{text}}</textarea><br />
         {{tag_control}}<br />
         <input type="submit" class="submt" value="Отправить" />
     </form>

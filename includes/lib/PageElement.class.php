@@ -66,6 +66,7 @@ abstract class PageElement extends Object {
         $add = false;
         $pointers = array();
         $lines_list = array();
+        
         while (!feof($fp)) {
             $str = fgets($fp);
             if (preg_match('/<!-- VIEW ([a-z0-9_]+) -->/', $str, $name)) {
@@ -102,7 +103,7 @@ abstract class PageElement extends Object {
                 $this->tpl[] = $result[0];
                 
                 foreach($vars[1] as $i => $v) {
-                    if (isset($this->data[$v])) {
+                    if (isset($this->properties[$v])) {
                         $this->tpl[] = &$this->data[$v];
                     }
                     elseif (isset($this->values[$v])) {
@@ -123,19 +124,6 @@ abstract class PageElement extends Object {
 
         return true;
     }
-    
-    public function parseHttpRequest() {
-        foreach ($this->properties as $i => $v) {
-            if (isset($_POST[$i])) {
-                if ($v = self::INT) {
-                    $this->data[$i] = intval($_POST[$i]);
-                }
-                if ($v = self::STRING) {
-                    $this->data[$i] = htmlspecialchars($_POST[$i]);
-                }
-            }
-        }
-    }
 
     /**
      *
@@ -148,6 +136,7 @@ abstract class PageElement extends Object {
         if ($tpl_name != '') {
             $this->setTplName($tpl_name);
         }
+        
         if ($this->tpl_name != $this->curent_tpl_name) {
             $this->loadTpl($this->tpl_name);
         }

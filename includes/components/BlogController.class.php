@@ -40,11 +40,7 @@ class BlogController {
     
     private function showBlogList() {
         $blogs = new Blog();
-        /**
-         * @todo Временно
-         */
-        $blogs->load('1 ORDER BY `date_create` DESC ');
-        
+        $blogs->load();
         if (Autorisation::i()->isLogin()) {
             $button = PageElement::getButton('/blogs/add', 'Добавить');
         }
@@ -98,7 +94,7 @@ class BlogController {
         $blog = new Blog($id);
         MainDecorator::i()->addContent($blog);
         
-        CommentsController::init(CommentsController::BLOG, $id);
+        //CommentsController::init(CommentsController::BLOG, $id);
     }
 }
 

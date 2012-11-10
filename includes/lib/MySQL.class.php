@@ -12,7 +12,7 @@ class MySQL {
      */
     private static $instance = null;
     
-    private $link;
+    private $mysqli;
     private $db_name;
     private $db_prefix;
     
@@ -20,11 +20,13 @@ class MySQL {
     
     private $sql_num_query;
     
+    private $join_array = array();
+    
     private function __construct($login, $password, $host, $db_name, $db_prefix) {
         $this->db_prefix = $db_prefix;
         $this->db_name = $db_name;
         
-        $this->link = @mysql_connect($host, $login, $password);
+        $this->mysqli = new mysqli($host, $login, $password, $db_name);
     }
 
     /**
@@ -38,9 +40,12 @@ class MySQL {
     public static function init($login, $password, $host, $db_name, $db_prefix) {
         if (self::$instance == null && !self::$instance instanceof self) {
             self::$instance = new self($login, $password, $host, $db_name, $db_prefix);
-            if (!self::$instance->link) {
-                self::$instance = false;
-            }
+            /**
+             * @todo реализовать проверку на наличие ошибок
+             */
+            //if (!self::$instance->link) {
+             //   self::$instance = false;
+            //}
         }
         return self::$instance;
     }
@@ -57,19 +62,32 @@ class MySQL {
         return '\''.$value.'\'';
     }
     
+    /**
+     * @todo реализовать
+     * Число всего записей после запроса без лимита или всего в таблице
+     */
     public function getCount() {
         
     }
     
+    /**
+     * Число выбраных записей
+     * @return int
+     */
     public function getCountSelected() {
         return $this->count_selected;
     }
 
+    /**
+     * Устанавливает кодировку для работы с базой
+     * @param string $string
+     * @return boolea
+     */
     public function char_set($string) {
-        if (!$this->link) {
+        if (!$this->mysqli) {
             return false;
         }
-        mysql_set_charset($string, $this->link);
+        $this->mysqli->set_charset($string);
     }
 
     /**
@@ -78,26 +96,66 @@ class MySQL {
     public static function i() {
         return self::init('', '', '', '', '');
     }
+    
+    /**
+     * Устанавливает добавление в запрос конструкции JOIN LEFT
+     * @param string $table_name Имя прикрепляемой таблицы
+     * @param string $field Имя поля в основной таблице по которой идет присоединение
+     */
+    public function setJoiin($table_name, $field) {
+        $this->join_array[$table_name] = $field;
+    }
+    
+    public function setLimit() {
+        
+    }
 
     public function db_select($table_name, $where) {
         
-        $query = 'SELECT * FROM `'.$this->db_name.'`.`'.$this->db_prefix.$table_name.'` '
-                .'WHERE '.$where;
-        $result = mysql_query($query);
+        $query = 'SELECT * FROM `'.$this->db_prefix.$table_name.'` AS t0'
+                .$this->getJoinQuery()
+                .' WHERE '.$where
+                .$this->getLimitQuery();
+        
+        $this->join_array = array();
+        
+        $result = $this->mysqli->query($query);
+        
+        $this->sql_num_query++;
         
         if ($result) {
-            $this->count_selected = mysql_num_rows($result);
-            return $result;
+            $this->count_selected = $result->num_rows;
+            return array($result, $result->fetch_fields());
         }
         return false;
     }
     
+    private function getJoinQuery() {
+        $join = '';
+        $i = 1;
+        foreach ($this->join_array as $table => $field) {
+            $join.= ' LEFT JOIN `'.$this->db_prefix.$table.'` AS t'.$i
+                   .' ON t'.$i.'.`id` = t0.`'.$field.'`';
+            $i++;
+        }
+        return $join;
+    }
+    
+    private function getLimitQuery() {
+        $limit = '';
+        
+        return $limit;
+    }
+
     /**
      * 
      * @param mysqli_result $result
      */
     public function getDbRow($result) {
-        return mysql_fetch_array($result);
+        if (!$result instanceof mysqli_result) {
+            return false;
+        }
+        return $result->fetch_array();
     }
 
     function db_insert($table_name, $data = array()) {
@@ -115,11 +173,11 @@ class MySQL {
                 VALUES
                 ('.join(',', $values).');';
 
-        mysql_query($query, $this->link);
+        $this->mysqli->query($query);
         
         $this->sql_num_query++;
 
-        return mysql_insert_id($this->link);
+        return $this->mysqli->insert_id;
     }
 
     public function db_update($table_name, $data = array(), $where = '') {
@@ -132,11 +190,19 @@ class MySQL {
         
         $query.= join(',', $set_data).' WHERE '.$where;
         
-        mysql_query($query, $this->link);
+        $this->mysqli->query($query);
 
         $this->sql_num_query++;
         
-        return mysql_affected_rows();
+        return $this->mysqli->affected_rows;
+    }
+    
+    public function db_delete() {
+        
+    }
+    
+    public function __destruct() {
+        $this->mysqli->close();
     }
 
 }

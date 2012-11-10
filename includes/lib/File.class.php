@@ -53,7 +53,7 @@ class File extends DataBasePageElement {
         //$this->UploadFile();
     }
     
-    public function updateComposition() {
+    public function afteLoad() {
         $this->user = new User($this->user_id);
         $this->values['file_url'] = $this->getUrl(false, 100);
         $this->values['file_ur_original'] = $this->getUrl(false, 600);
@@ -180,8 +180,10 @@ class File extends DataBasePageElement {
     
     public function rander($tpl_name = '') {
         
+        $html = '';
+        
         if ($this->getCount()) {
-            $html = parent::rander('main');
+            $html.= parent::rander('main');
         }
         
         if ($this->can_edit) {
@@ -217,7 +219,7 @@ class File extends DataBasePageElement {
     public function getStatus() {
         $bloc = new ContentBlock();
         $this->values['count_file'] = $this->getCount();
-        $bloc->values['content'] = parent::rander('status');
+        $bloc->content = parent::rander('status');
         return $bloc->rander();
     }
 

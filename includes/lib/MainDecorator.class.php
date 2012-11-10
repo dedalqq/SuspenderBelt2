@@ -34,6 +34,7 @@ class MainDecorator extends PageElement {
         'page_title' => self::STRING,
         'encoding' => self::STRING,
         'menu' => self::STRING,
+        'top_menu' => self::STRING,
         'content' => self::STRING,
         'footer' => self::STRING,
         'form_login' => self::STRING,
@@ -69,10 +70,10 @@ class MainDecorator extends PageElement {
     
     public function addContent($content, $place = 'content') {
         if ($place == 'content') {
-            $this->data[$place].= $content;
+            $this->$place.= $content;
         }
         else {
-            $this->data[$place] = $content;
+            $this->$place = $content;
         }
     }
 

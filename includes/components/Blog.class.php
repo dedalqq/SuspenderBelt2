@@ -29,19 +29,21 @@ class Blog extends DataBasePageElement {
     );
     
     public function __construct($id = 0) {
+        
         $this->user = new User();
+        $this->addToIndexComposition($this->user, 'user_id');
+        
         parent::__construct($id);
     }
     
-    public function updateComposition() {
-        $this->user->id = $this->user_id;
-        $this->user->load();
+    public function afteLoad() {
         if (Autorisation::i()->getUser()->id == $this->user_id) {
             $this->setBlock('can_edit');
         }
         else {
             $this->setBlock('can_edit', false);
         }
+        $this->values['date'] = Date::format($this->date_create);
     }
     
     public function getUser() {
@@ -86,6 +88,14 @@ class Blog extends DataBasePageElement {
     }
     
     public function rander($tpl_name = '') {
+        
+        if ($this->getCount() === 0) {
+            $bloc = new ContentBlock();
+            $bloc->content = "Еще ни одна сущность не отписалась тут.";
+            $bloc->align = 'center';
+            return $bloc;
+        }
+        
         if ($this->tpl_name == 'blog_form') {
             if ($this->id == 0) {
                 $this->values['editor_mod'] = 'Создать новое сообщение';
@@ -100,16 +110,12 @@ class Blog extends DataBasePageElement {
         
         $block = new ContentBlock();
         
-        $this->data['date_create'] = Date::format($this->date_create);
-        $block->content = parent::rander();
-        
-        $html = (string)$block;
-        
-        while ($this->fetch()) {
-            $this->data['date_create'] = Date::format($this->date_create);
-            $block->content = parent::rander();
-            $html.= $block;
+        $html = '';
+        do {
+            $block->content = parent::rander($tpl_name);
+            $html.= (string)$block;
         }
+        while ($this->fetch());
         
         return $html;
     }

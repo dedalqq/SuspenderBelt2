@@ -22,6 +22,12 @@ abstract class Object {
      * @var array
      */
     protected $properties = array();
+    
+    /**
+     * индекс композиции
+     * @var array
+     */
+    protected $composition_index = array();
 
     public function __construct() {
         
@@ -30,9 +36,21 @@ abstract class Object {
     public function __set($name, $value) {
         if (isset($this->properties[$name])) {
             if ($this->properties[$name] == self::INT) {
-                $this->data[$name] = (int) $value;
-            } elseif ($this->properties[$name] == self::STRING) {
-                $this->data[$name] = (string) $value;
+                $this->data[$name] = (int)$value;
+            }
+            elseif ($this->properties[$name] == self::STRING) {
+                $this->data[$name] = (string)$value;
+            }
+            elseif (false && $this->properties[$name] == self::TYPE_ARRAY) {
+                if (is_string($value)) {
+                    $this->data[$name] = unserialize($value);
+                }
+                elseif (is_array($value)) {
+                    $this->data[$name] = $value;
+                }
+                else {
+                    $this->data[$name] = array();
+                }
             }
         }
     }
@@ -45,27 +63,37 @@ abstract class Object {
     }
     
     /**
+     * Добовляет объект в композицию
+     * @param DataBasePageElement $object
+     * @param string $fild
+     */
+    public function addToIndexComposition($object, $fild) {
+        $this->composition_index[$fild] = $object;
+    }
+    
+    /**
      *
      * @param array $data
      * @return bool
      */
-    public function setData($data) {
-        foreach ($this->properties as $name => $type) {
-            if ($type == self::INT) {
-                $this->data[$name] = intval($data[$name]);
-            } elseif ($type == self::STRING) {
-                $this->data[$name] = strval($data[$name]);
-            } elseif ($type == self::TYPE_ARRAY) {
-                if (is_array($data[$name])) {
-                    $this->data[$name] = $data[$name];
-                } elseif (is_array($array = unserialize($data[$name]))) {
-                    $this->data[$name] = $array;
-                } else {
-                    $this->data[$name] = array();
-                }
+    public function setData($data, $from_db = false) {
+        if ($from_db) {
+            
+        }
+        else {
+            foreach ($this->properties as $name => $type) {
+                $this->$name = $data[$name];
             }
         }
         return true;
+    }
+    
+    public function parseHttpRequest() {
+        foreach ($this->properties as $i => $v) {
+            if (isset($_POST[$i])) {
+                $this->$i = $_POST[$i];
+            }
+        }
     }
     
     public function getData() {

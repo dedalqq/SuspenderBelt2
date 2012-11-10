@@ -25,24 +25,20 @@ abstract class DataBasePageElement extends PageElement {
      */
     private $sql_result;
     
+    private $sql_fields;
+
+
     /**
      * Число элементов которое удалось найти
      * @var int
      */
-    private $num_elements = 0;
+    private $num_elements = false;
     
     /**
      * Порядковый номер текущего элемента
      * @var int
      */
     private $current_elements = 0;
-    
-    /**
-     * Показывает, былали попытка выбрать данные из базы
-     * Тоесть был ли вызов метода load()
-     * @var bool
-     */
-    private $was_selected = false;
 
     protected $rander_all_elements = false;
 
@@ -78,13 +74,15 @@ abstract class DataBasePageElement extends PageElement {
 
     public function load($where = '1') {
         if ($this->id > 0) {
-            $where = '`id`='.$this->id;
+            $where = 't0.id='.$this->id;
         }
         
-        $this->sql_result = $this->sql->db_select($this->getTableName(), $where);
-        $this->num_elements = $this->sql->getCountSelected();
+        foreach ($this->composition_index as $field => $object) {
+            $this->sql->setJoiin($object->getTableName(), $field);
+        }
         
-        $this->was_selected = true;
+        list($this->sql_result, $this->sql_fields) = $this->sql->db_select($this->getTableName(), $where);
+        $this->num_elements = (int)$this->sql->getCountSelected();
         
         if ($this->num_elements > 0) {
             $this->current_elements = 0;
@@ -93,7 +91,7 @@ abstract class DataBasePageElement extends PageElement {
         return false;
     }
     
-    public function updateComposition() {
+    public function afteLoad() {
         
     }
 
@@ -101,18 +99,37 @@ abstract class DataBasePageElement extends PageElement {
         if ($this->current_elements == $this->num_elements) {
             return false;
         }
-        $this->setData($this->sql->getDbRow($this->sql_result));
-        $this->updateComposition();
+        
+        $set_data_fields['t0'] = $this;
+        $i = 1;
+        foreach ($this->composition_index as $field => &$object) {
+            $set_data_fields['t'.$i] = $object;
+            $i++;
+        }
+        
+        $data = $this->sql->getDbRow($this->sql_result);
+        if (!is_array($this->sql_fields)) {
+            var_dump($this->sql_fields);
+            exit;
+        }
+        
+        foreach ($this->sql_fields as $i => $v) {
+            $field = (string)$v->name;
+                    
+            $set_data_fields[$v->table]->$field = $data[$i];
+        }
         $this->current_elements++;
+        $this->afteLoad();
         return true;
     }
     
     /**
      * Возвращает число элементов которые удалось загрузить
-     * @return int
+     * Или false если выборки из базы небыло
+     * @return int|false
      */
     public function getCount() {
-        return (int)$this->num_elements;
+        return $this->num_elements;
     }
 
     protected function beforeSave() {
@@ -142,9 +159,6 @@ abstract class DataBasePageElement extends PageElement {
     }
     
     public function rander($tpl_name = '') {
-        if ($this->was_selected && $this->num_elements == 0) {
-            return '';
-        }
         $html = parent::rander($tpl_name);
         if ($this->rander_all_elements) {
             while ($this->fetch()) {

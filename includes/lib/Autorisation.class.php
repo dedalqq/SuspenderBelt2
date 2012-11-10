@@ -8,7 +8,7 @@
  * @property int $id
  * @property string $session_id Description
  * @property int $user_id ид пользователя
- * @property array $data Данные хранимые в сессии
+ * @property array $ex_data Данные хранимые в сессии
  * @property int $date_login Дата авторизации
  * @property int $date_last_ping Дата последнего отклика от пользователя
  * @property int $date_ping хз =) не помню =)
@@ -32,7 +32,7 @@ class Autorisation extends DataBasePageElement {
             'id' => self::INT,
             'session_id' => self::STRING,
             'user_id' => self::INT,
-            'data' => self::TYPE_ARRAY,
+            'ex_data' => self::TYPE_ARRAY,
             'date_login' => self::INT,
             'date_last_ping' => self::INT,
             'date_ping' => self::INT
@@ -41,16 +41,19 @@ class Autorisation extends DataBasePageElement {
         $this->user = new User();
         
         $cookie_name = '42qq';
-        $cookie_value = md5(Date::now().'_42qq');
-        $cookie_live = Date::now()+60*60*24+10;
         
         if (empty($_COOKIE[$cookie_name])) {
+            $cookie_live = Date::now()+60*60*24+10;
+            $cookie_value = md5(Date::now().'_42qq');
+            
             setcookie($cookie_name, $cookie_value, $cookie_live, '/');
             $this->session_id = $cookie_value;
+            $this->save();
         }
         else {
             $this->session_id = $_COOKIE[$cookie_name];
             $this->load('`session_id`='.MySQL::stringHandler($this->session_id));
+            $this->save();
         }
         
         $this->getStatus();
@@ -140,6 +143,8 @@ class Autorisation extends DataBasePageElement {
             $this->setBlock('auth_off');
             $this->is_login = false;
         }
+        //bug($this->loadTpl('main'));
+        //bug($this->tpl);
         MainDecorator::i()->addContent($this, 'form_login');
     }
 
