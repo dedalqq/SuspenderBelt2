@@ -10,8 +10,6 @@
  * @property int $user_id ид пользователя
  * @property array $ex_data Данные хранимые в сессии
  * @property int $date_login Дата авторизации
- * @property int $date_last_ping Дата последнего отклика от пользователя
- * @property int $date_ping хз =) не помню =)
  * 
  */
 class Autorisation extends DataBasePageElement {
@@ -34,8 +32,6 @@ class Autorisation extends DataBasePageElement {
             'user_id' => self::INT,
             'ex_data' => self::TYPE_ARRAY,
             'date_login' => self::INT,
-            'date_last_ping' => self::INT,
-            'date_ping' => self::INT
         );
         
         $this->user = new User();
@@ -104,6 +100,7 @@ class Autorisation extends DataBasePageElement {
                 
                 $this->user_id = $this->user->id;
                 $this->date_login = Date::now();
+                $this->user->date_last_ping = Date::now();
                 $this->save();
                 
                 MainDecorator::i()->addContent($this, 'form_login');
@@ -111,7 +108,12 @@ class Autorisation extends DataBasePageElement {
                 $page->info_mass = 'Неверное сочитание логина и пароля!';
                 $page->setError();
             }
-        } elseif ($action == 'exit') {
+        }
+        elseif ($action == 'exit') {
+            
+            $this->user->date_last_ping = Date::now()-15;
+            $this->user->id = $this->user_id;
+            $this->user->save();
             
             $this->user_id = 0;
             $this->save();
@@ -119,6 +121,23 @@ class Autorisation extends DataBasePageElement {
             $page->info_mass = 'До скорой встречи!';
             $page->setOk();
             MainDecorator::i()->addContent($this, 'form_login');
+        }
+        elseif ($action == 'ping') {
+            
+            $this->user = new User((int)$this->user_id);
+            
+            if ($this->user->id > 0) {
+                $this->user->date_last_ping = Date::now();
+                $this->user->save();
+                
+                $data = array();
+                /**
+                 * @todo тут добавить то, что будет отправлять пользователю
+                 */
+                echo json_encode($data);
+                exit;
+            }
+            
         }
 
         $this->getStatus();

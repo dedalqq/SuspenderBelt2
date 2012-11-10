@@ -173,7 +173,10 @@ class App {
 
         return '';
     }
-
+    
+    public static function countString($val, $string) {
+        
+    }
 }
 
 ?>

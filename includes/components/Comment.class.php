@@ -43,6 +43,8 @@ class Comment extends DataBasePageElement {
         else {
             $this->setBlock('can_edit', false);
         }
+        
+        $this->values['user_status'] = $this->user->getStatus();
     }
     
     public function getUser() {

@@ -20,6 +20,14 @@ input {
     margin: 0px;
 }
 
+.green {
+    color: #33cc00;
+}
+
+.red {
+    color: #FF0000;
+}
+
 div.body {
     width: 1024px;
     margin: auto;

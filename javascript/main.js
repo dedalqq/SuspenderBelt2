@@ -150,3 +150,16 @@ function sand() {
             
    return false;
 }
+
+function serverPing() {
+
+    $.ajax({
+        type: "POST",
+        cache: false,
+        dataType: 'json',
+        url: '/autorisation/ping/',
+        data: ''
+    }).done(function(data) {
+        
+    });
+}

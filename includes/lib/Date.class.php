@@ -37,10 +37,37 @@ class Date {
     }
     
     static public function format($date) {
-        return date('j ', $date)
-                .self::$months[date('n', $date)]
-                .date(' Y H:i', $date);
+        if (false) {
+            return date('j ', $date)
+                    .self::$months[date('n', $date)]
+                    .date(' Y H:i', $date);
+        }
+        else {
+            $value = self::$now - $date;
+            $s = (int)date('s', $value);
+            $i = (int)date('i', $value);
+            $h = (int)date('H', $value) - (int)date('Z')/60/60;
+            $d = (int)date('j', $value) - 1;
+            
+            $result = $s.' с. назад';
+            
+            if ($i) {
+                $result = $i.' м. '.$result;
+            }
+            
+            if ($h) {
+                $result = $h.' ч. '.$result;
+            }
+            
+            if ($d) {
+                $result = $d.' д. '.$result;
+            }
+            
+            return $result;
+        }
     }
+    
+    
 }
 
 ?>

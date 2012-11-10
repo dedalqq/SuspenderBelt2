@@ -44,6 +44,7 @@ class Blog extends DataBasePageElement {
             $this->setBlock('can_edit', false);
         }
         $this->values['date'] = Date::format($this->date_create);
+        $this->values['user_status'] = $this->user->getStatus();
     }
     
     public function getUser() {

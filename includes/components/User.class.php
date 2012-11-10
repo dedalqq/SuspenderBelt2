@@ -15,6 +15,8 @@
  * @property int $num_comments Description
  * @property int $num_posts Description
  * 
+ * @property int $date_last_ping Description
+ * 
  */
 class User extends DataBasePageElement {
     
@@ -27,6 +29,7 @@ class User extends DataBasePageElement {
         'mid_name' => self::STRING,
         'num_comments' => self::INT,
         'num_posts' => self::INT,
+        'date_last_ping' => self::INT
     );
 
     public function __construct($id = 0) {
@@ -39,6 +42,15 @@ class User extends DataBasePageElement {
 
     public function getTplFileName() {
         return 'user';
+    }
+    
+    public function getStatus() {
+        if (Date::now() - $this->date_last_ping < 14) {
+            return '<span class="green">On line</span>';
+        }
+        else {
+            return '<span class="red">Off line</span>';
+        }
     }
 }
 
