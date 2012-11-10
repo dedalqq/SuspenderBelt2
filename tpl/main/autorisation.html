@@ -22,8 +22,18 @@
 
 
 <!-- VIEW login_form -->
-<div style="float: left">
-    qqqq
+<div style="float: left; width: 49%; border-right: 1px solid #CCCCCC; ">
+    <div style="margin: 80px;">
+        <h2>Авторизация</h2>
+        <p style="margin: 10px;">Для того, что бы получить доступ к этому разделу портала, вам необходимо пройти процедуру авторизацию.</p>
+    </div>
 </div>
-<div>
+<div style="float: left; width: 50%">
+    <div style="margin: 80px;">
+        <form action="/autorisation/login/" method="POST">
+            <div style="margin: 5px; text-align: right;">Логин: <input type="text" name="login" /></div>
+            <div style="margin: 5px; text-align: right;">Пароль: <input type="password" name="password" /></div>
+            <div style="margin: 5px; text-align: right;"><input type="submit" value="Войти" /></div>
+        </form>
+    </div>
 </div>

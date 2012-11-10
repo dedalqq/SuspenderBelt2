@@ -1,6 +1,6 @@
 <!-- VIEW main -->
 Комментарий:
-<div style="float: right;"><span class="date">{{date_create}}</span>
+<div style="float: right;"><span class="date">{{date}}</span>
 <!-- BEGIN can_edit -->
     [<a href="/blogs/edit/{{id}}">Редактировать</a>]
 <!-- END can_edit -->
@@ -13,13 +13,25 @@
 </div>
 <p>{{html_text}}</p>
 
+
+
 <!-- VIEW form -->
 <div class="comment">
-    <form action="" method="POST">
+    <script src="/javascript/jquery.wysibb-1.2.3.min.js"></script>
+    <link rel="stylesheet" href="/css/wbbtheme.css" />
+    <script>
+        $(document).ready(function() {
+            var wbbOpt = {
+                buttons: "bold,italic,underline,|,img,link,|,quote"
+              }
+          $("#editor").wysibb(wbbOpt)
+        })
+    </script>
+    <form action="" id="coment_form" method="POST">
         <input type="hidden" name="object_id" value="{{object_id}}" />
         <input type="hidden" name="object" value="{{object}}" />
         <input type="hidden" name="save" value="1" />
-        Текст сообщения:<br><textarea name="text">{{text}}</textarea><br />
-        <input type="submit" class="submt" value="Отправить" />
+        Текст сообщения:<br><textarea id="editor" name="text">{{text}}</textarea><br />
+        <button onclick="return sand()">Отправить</button>
     </form>
 </div>

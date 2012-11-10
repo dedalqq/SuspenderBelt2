@@ -52,7 +52,11 @@ class TagControl extends DataBasePageElement {
     /**
      * @return array
      */
-    public static function add() {
+    public static function add($array) {
+        
+        if (!isset($_POST['tag'])) {
+            return false;
+        }
         
         $array = $_POST['tag'];
         
@@ -67,8 +71,6 @@ class TagControl extends DataBasePageElement {
                 $tag->save();
             }
         }
-        
-        return $array;
     }
 }
 

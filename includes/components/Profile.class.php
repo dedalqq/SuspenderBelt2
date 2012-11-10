@@ -12,9 +12,7 @@ class Profile extends PageElement {
     private static $instance;
     
     public function __construct() {
-        if (!Autorisation::i()->isLogin()) {
-            return false;
-        }
+        App::error(401);
         
         App::breadcrumb()->add('/profile', 'Профиль');
         $this->show();

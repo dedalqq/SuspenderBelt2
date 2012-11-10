@@ -126,25 +126,41 @@ class App {
     }
     
     public static function error($error = '404') {
-        $info = new PageInfo();
-        $info->setError();
         
         if ($error == '404') {
+            $info = new PageInfo();
+            $info->setError();
+            
             $info->page_title = 'Ошибка 404.';
             $info->info_mass = 'Мы приносим вам глубочайшие извинения, но к сожалению данная страница не найдена Т_Т.';
-            MainDecorator::i()->addContent($info);
-        
-            App::getMainDecorator()->rander();
-            exit();
         }
         elseif ($error == '401') {
+            $info = new ContentBlock();
             
+            $auth = Autorisation::i();
+            
+            if ($auth->isLogin()) {
+                return false;
+            }
+            else {
+                $auth->setTplName('login_form');
+                $info->content = $auth;
+            }
+            /**
+             * @todo сделать так, что бы при авторизации возвращало на ту страницу на кторой был
+             */
         }
         else {
-            $info->page_title = 'Ошибка';
+            $info = new PageInfo();
+            $info->setError();
+        
+            $info->page_title = 'Неведомая ошибка';
             $info->info_mass = $error;
-            MainDecorator::i()->addContent($info);
         }
+        
+        MainDecorator::i()->addContent($info);
+        App::getMainDecorator()->rander();
+        exit();
     }
 
     /**

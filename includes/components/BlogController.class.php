@@ -54,9 +54,7 @@ class BlogController {
     }
     
     private function showForm($id = 0) {
-        if (!Autorisation::i()->isLogin()) {
-            App::error();
-        }
+        App::error(401);
         
         $blog = new Blog($id);
         $blog->setTplName('blog_form');
@@ -65,9 +63,8 @@ class BlogController {
     }
     
     private function saveBlogMass() {
-        if (!Autorisation::i()->isLogin()) {
-            App::error();
-        }
+        
+        App::error(401);
         
         $blog = new Blog();
         $blog->parseHttpRequest();
@@ -94,7 +91,7 @@ class BlogController {
         $blog = new Blog($id);
         MainDecorator::i()->addContent($blog);
         
-        //CommentsController::init(CommentsController::BLOG, $id);
+        CommentsController::init(CommentsController::BLOG, $id);
     }
 }
 

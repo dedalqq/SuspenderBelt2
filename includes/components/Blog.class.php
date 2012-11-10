@@ -74,7 +74,7 @@ class Blog extends DataBasePageElement {
 	$output = $bbcode->Parse($input);
         $this->html_text = $output;
         
-        $this->tags = TagControl::add();
+        //TagControl::add(&$this->data['tags']);
         
         return true;
     }

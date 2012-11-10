@@ -129,6 +129,24 @@ function initTagControl() {
  */
 
 function add_tag(name) {
-    var html = '<div class="added_tag"><input type="hidden" name="tag[]" value="'+name+'" /><span>'+name+'</span><img src="/tpl/main/img/rm.png"></div>';
+    var html = '<div class="added_tag"><input type="hidden" name="tag[]" value="'+name+'" /><span>'+name+'</span> <img src="/tpl/main/img/x.png"></div>';
     $('#tag_list').append(html);
+}
+
+
+function sand() {
+    
+    $.ajax({
+        type: "POST",
+        cache: false,
+        dataType: 'json',
+        url: '',
+        data: $("#coment_form").serialize()
+    }).done(function(data) {
+        //alert(1);
+        $('#comments_list').append(data.comment);
+        $("#comment_info").remove();
+    });
+            
+   return false;
 }

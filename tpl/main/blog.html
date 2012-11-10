@@ -16,8 +16,8 @@
 <!-- VIEW blog_form -->
 <h2>{{editor_mod}}</h2>
 <div class="blog_form">
-    <script src="http://cdn.wysibb.com/js/jquery.wysibb-1.2.3.min.js"></script>
-    <link rel="stylesheet" href="http://cdn.wysibb.com/css/default/wbbtheme.css" />
+    <script src="/javascript/jquery.wysibb-1.2.3.min.js"></script>
+    <link rel="stylesheet" href="/css/wbbtheme.css" />
     <script>
         $(document).ready(function() {
             var wbbOpt = {
@@ -29,7 +29,7 @@
     <form action="/blogs/save/" method="POST">
         <input type="hidden" name="id" value="{{id}}" />
         <input type="hidden" name="save" value="1" />
-        Тема: <input class="subject" type="text" name="title" value="{{title}}" /><br />
+        Тема: <input class="subject" type="text" name="title" value="{{title}}" /><br /><br />
         Текст сообщения:<br><textarea name="text" id="editor">{{text}}</textarea><br />
         {{tag_control}}<br />
         <input type="submit" class="submt" value="Отправить" />

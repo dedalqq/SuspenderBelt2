@@ -1,7 +1,7 @@
 <!-- VIEW main -->
 <div class="tag_control">
     <div id="tag_list"></div>
-    <input type="text" OutFocus="add_tag(this.value)" name="tag_input" id="tag_input" />
+    <input type="text" onblur="add_tag(this.value); this.value=''" name="tag_input" AUTOCOMPLETE="OFF" id="tag_input" />
     <div class="select_list" id="select_list"></div>
     <script>
         initTagControl();

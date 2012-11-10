@@ -34,15 +34,21 @@ class CommentsController {
             $comment = new Comment();
             $comment->parseHttpRequest();
             if ($comment->id == 0) {
-                Autorisation::i()->getUser()->num_comments++;
-                Autorisation::i()->getUser()->save();
+                $user = Autorisation::i()->getUser();
+                $user->num_comments++;
+                $user->save();
             }
             $comment->save();
+            $comment->afteLoad();
+            echo json_encode(array('comment' => (string)$comment));
+            exit;
         }
+        
+        $html = '<h2>Комментарии</h2>';
         
         $comment = new Comment();
         $comment->load('object_id='.$this->object_id.' AND object='.$this->object);
-        MainDecorator::i()->addContent($comment);
+        MainDecorator::i()->addContent($html.'<div id="comments_list">'.$comment.'</div>');
         
         
         $form = new Comment();
