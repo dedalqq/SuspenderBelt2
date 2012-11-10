@@ -48,8 +48,6 @@ else {
     app::error(401);
 }
 
-bug($_SERVER);
-
 App::getMainDecorator()->rander();
 
 /**
