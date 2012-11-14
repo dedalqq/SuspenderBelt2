@@ -12,6 +12,8 @@ class MySQL {
      */
     private static $instance = null;
     
+    private static $error = '';
+    
     private $mysqli;
     private $db_name;
     private $db_prefix;
@@ -43,9 +45,6 @@ class MySQL {
             /**
              * @todo реализовать проверку на наличие ошибок
              */
-            //if (!self::$instance->link) {
-             //   self::$instance = false;
-            //}
         }
         return self::$instance;
     }
@@ -94,7 +93,9 @@ class MySQL {
      * @return MySQL
      */
     public static function i() {
-        return self::init('', '', '', '', '');
+        if (self::$instance) {
+            return self::$instance;
+        }
     }
     
     /**
@@ -203,6 +204,13 @@ class MySQL {
     
     public function __destruct() {
         $this->mysqli->close();
+    }
+    
+    public static function getError() {
+        if (empty(self::$error)) {
+            return false;
+        }
+        return self::$error;
     }
 
 }

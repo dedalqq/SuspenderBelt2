@@ -76,6 +76,7 @@ class BlogController {
         if ($blog->save()) {
             
             $info = new PageInfo();
+            $info->setOk();
             $info->page_title = 'Сообщение сохранено';
             $info->info_mass = 'Поздравляем ^_^ ваше сообщение было успешно сохранено в системе =)';
 

@@ -174,8 +174,14 @@ abstract class PageElement extends Object {
         return (string)$this->rander();
     }
     
+    /**
+     * @todo подтягивать кнопку из шабловофф
+     * @param type $url
+     * @param type $name
+     * @return type
+     */
     public static function getButton($url, $name) {
-        return '<div><a href="'.$url.'" class="button">'.$name.'</a></div>';
+        return '<div><a href="'.$url.'" class="ax button">'.$name.'</a></div>';
     }
 
 }

@@ -340,3 +340,19 @@ table.dialog {
     border-radius: 4px;
     vertical-align: top;
 }
+
+.event {
+    z-index: 100;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+}
+
+.event > div {
+    padding: 5px;
+    margin: 5px;
+    width: 200px;
+    height: 50px;
+    border: solid 1px #CCCCCC;
+    background-color: #999999;
+}

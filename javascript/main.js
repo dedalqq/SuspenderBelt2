@@ -3,10 +3,16 @@
  * and open the template in the editor.
  */
 
+  var socket = io.connect('http://42qq.ru:8080/');
+  
+  socket.on('text', function (data) {
+    $('#event').append('<div>'+data['text']+'</div>');
+  });
+
 function onAjaxMod() {
     var reg = new RegExp("\\?");
     var reg_on = new RegExp("a_mode_on");
-    $('a').each(function(i, el) {
+    $('.ax').each(function(i, el) {
         
             if (!reg_on.test($(el).attr('class'))) {
             
@@ -34,7 +40,7 @@ function onAjaxMod() {
         
         if (!reg_on.test($(el).attr('class'))) {
             
-        $(el).find('input[type="submit"]').click(function() {
+        $(el).find('input[type=submit]:not(.a_mode_on)').click(function() {
 
             $.ajax({
                 type: "POST",
@@ -133,7 +139,9 @@ function add_tag(name) {
     $('#tag_list').append(html);
 }
 
-
+/**
+ * @todo переименовать, что бы было ясно что это к коментам
+ */
 function sand() {
     
     $.ajax({
@@ -151,15 +159,9 @@ function sand() {
    return false;
 }
 
-function serverPing() {
-
-    $.ajax({
-        type: "POST",
-        cache: false,
-        dataType: 'json',
-        url: '/autorisation/ping/',
-        data: ''
-    }).done(function(data) {
-        
-    });
+/**
+* @todo реализовать функцию вставки событий
+ */
+function showEvent(q_text) {
+    socket.emit('text', { text: q_text });
 }

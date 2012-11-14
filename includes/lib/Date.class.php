@@ -43,10 +43,10 @@ class Date {
                     .date(' Y H:i', $date);
         }
         else {
-            $value = self::$now - $date;
+            $value = self::$now - $date  - (int)date('Z');
             $s = (int)date('s', $value);
             $i = (int)date('i', $value);
-            $h = (int)date('H', $value) - (int)date('Z')/60/60;
+            $h = (int)date('H', $value);
             $d = (int)date('j', $value) - 1;
             
             $result = $s.' с. назад';

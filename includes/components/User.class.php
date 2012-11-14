@@ -15,8 +15,6 @@
  * @property int $num_comments Description
  * @property int $num_posts Description
  * 
- * @property int $date_last_ping Description
- * 
  */
 class User extends DataBasePageElement {
     
@@ -29,7 +27,6 @@ class User extends DataBasePageElement {
         'mid_name' => self::STRING,
         'num_comments' => self::INT,
         'num_posts' => self::INT,
-        'date_last_ping' => self::INT
     );
 
     public function __construct($id = 0) {

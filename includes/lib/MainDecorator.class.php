@@ -85,8 +85,15 @@ class MainDecorator extends PageElement {
         
         $this->content = App::breadcrumb().$this->error_mass.$this->content;
         
-        echo parent::rander();
-        echo "\n".'<!-- done: ' . App::getRuningTime() . ' -->';
+        if (isset($_GET['print_only_content'])) {
+            $content = array();
+            $content['content'] = $this->content;
+            echo json_encode($content);
+        }
+        else {
+            echo parent::rander();
+            echo "\n".'<!-- done: ' . App::getRuningTime() . ' -->';
+        }
     }
 
 }
