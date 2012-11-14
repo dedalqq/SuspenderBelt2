@@ -3,10 +3,24 @@
  * and open the template in the editor.
  */
 
-  var socket = io.connect('http://42qq.ru:8080/');
-  
+var socket = io.connect('http://'+ws_host+':'+ws_port+'/');
+
   socket.on('text', function (data) {
     $('#event').append('<div>'+data['text']+'</div>');
+  });
+  
+  socket.on('chat', function (data) {
+    $('#chat_list').append('<div><span>'+data['user']+'</span>: '+data['data']['text']+'</div>');
+    $('#chat_list').animate({ scrollTop: $('#chat_list').prop("scrollHeight")}, 500);
+  });
+
+socket.on('user_list', function (data) {
+    console.log(data)
+    $('#user_list').html('');
+    for (i in data['data']) {
+        
+        $('#user_list').append('<div>'+data['data'][i]+'</div>');
+    }
   });
 
 function onAjaxMod() {
@@ -35,12 +49,12 @@ function onAjaxMod() {
             }
     });
     
-    $('form').each(function(i, el) {
+    $('form:not(.a_mode_on)').each(function(i, el) {
         var action = $(el).attr('action');
         
         if (!reg_on.test($(el).attr('class'))) {
             
-        $(el).find('input[type=submit]:not(.a_mode_on)').click(function() {
+        $(el).find('input[type=submit]').click(function() {
 
             $.ajax({
                 type: "POST",
@@ -159,9 +173,29 @@ function sand() {
    return false;
 }
 
+function onPress(e) {
+    if (e.keyCode == 13) {
+        sandChatMass();
+        return false;
+    }
+}
+
 /**
 * @todo реализовать функцию вставки событий
  */
 function showEvent(q_text) {
-    socket.emit('text', { text: q_text });
+    socket.emit('event', { text: q_text });
+}
+
+function sandChatMass() {
+    var text = $('#chat_text').val();
+
+    var comand = text.match(/\/[a-zA-Z0-9]+\s?/);
+    text = text.replace(/(\/[a-zA-Z0-9]+\s?)/, '');
+    
+    //alert(comand);
+    //alert(text);
+    socket.emit('chat', { text: text,  comand: comand});
+    
+    $('#chat_text').val('');
 }

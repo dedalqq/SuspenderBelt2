@@ -79,6 +79,9 @@ class MainDecorator extends PageElement {
 
     public function rander($tpl_name = '') {
         
+        $this->values['ws_host'] = $GLOBALS['config']['ws_host'];
+        $this->values['ws_port'] = $GLOBALS['config']['ws_port'];
+        
         header('Content-Type: text/html; charset='.$GLOBALS['config']['encoding']);
         
         $this->encoding = $GLOBALS['config']['encoding'];

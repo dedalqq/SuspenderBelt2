@@ -41,6 +41,9 @@ elseif (App::getCurrentCategory(1) == 'file') {
         $file->getFileContent();
     }
 }
+elseif (App::getCurrentCategory(1) == 'chat') {
+    ChatController::init();
+}
 elseif (App::getCurrentCategory(1) == 'tags') {
     TagControl::getTagsList();
 }

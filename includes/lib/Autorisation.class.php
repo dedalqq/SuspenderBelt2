@@ -56,6 +56,10 @@ class Autorisation extends DataBasePageElement {
             $this->save();
         }
         
+        if ($this->user_id > 0) {
+            $this->user = new User((int)$this->user_id);
+        }
+        
         $this->getStatus();
     }
     
@@ -158,8 +162,6 @@ class Autorisation extends DataBasePageElement {
             $this->setBlock('auth_off', false);
             
             $this->is_login = true;
-
-            $this->user = new User((int)$this->user_id);
             
         } else {
             
