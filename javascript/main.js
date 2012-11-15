@@ -19,7 +19,7 @@ socket.on('user_list', function (data) {
     $('#user_list').html('');
     for (i in data['data']) {
         
-        $('#user_list').append('<div>'+data['data'][i]+'</div>');
+        $('#user_list').append('<div onclick="insert_text(\'@'+data['data'][i]+'\', \'chat_text\')" class="chat_user_itm">'+data['data'][i]+'</div>');
     }
   });
 
@@ -111,12 +111,12 @@ function initUploadFile() {
         });
 }
 
-function updateFile(file_id) {
+function updateFile(file_id, url) {
     $.ajax({
         type: "POST",
         cache: false,
         data: {get_preview: 1, file_id: file_id},
-        url: ""
+        url: url
         }).done(function(data) {
             $("#frame").html(data);
         });
@@ -198,4 +198,27 @@ function sandChatMass() {
     socket.emit('chat', { text: text,  comand: comand});
     
     $('#chat_text').val('');
+}
+
+function insert_text(text, el)
+{
+    var selekt = document.getElementById(el).selectionStart;
+    var main_text = document.getElementById(el).value;
+    var i = 0;
+    var all_text = "";
+    while (i < selekt) {
+        all_text = all_text + main_text.charAt(i);
+        i++;
+    }
+
+    all_text = all_text + text;
+
+    while (i <= main_text.length) {
+        all_text = all_text + main_text.charAt(i);
+        i++;
+    }
+
+    document.getElementById(el).value = all_text;
+    document.getElementById(el).selectionStart = selekt + text.length + 2;
+    
 }

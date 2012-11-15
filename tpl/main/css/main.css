@@ -395,3 +395,8 @@ table.dialog {
 .chat #chat_list span {
     color: #0049C4;
 }
+
+.chat_user_itm:hover {
+    background-color: #96cdfe;
+     cursor: pointer;
+}

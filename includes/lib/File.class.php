@@ -48,6 +48,8 @@ class File extends DataBasePageElement {
             exit();
         }
         
+        $this->values['link'] = $_SERVER['REDIRECT_URL'];
+        
         $this->loadById($id);
         
         //$this->UploadFile();
@@ -148,7 +150,7 @@ class File extends DataBasePageElement {
             $object->save();
         }
         echo "<script>
-                window.parent.updateFile(".$return_file_id.");
+                window.parent.updateFile(".$return_file_id.", ".$this->values['link'].");
             </script>";
             
         exit();
