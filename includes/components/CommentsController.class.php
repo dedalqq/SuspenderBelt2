@@ -40,6 +40,7 @@ class CommentsController {
             }
             $comment->save();
             $comment->afteLoad();
+            $comment->setBlock('scroll');
             echo json_encode(array('comment' => (string)$comment));
             exit;
         }

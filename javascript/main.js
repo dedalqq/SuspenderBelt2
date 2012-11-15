@@ -156,13 +156,13 @@ function add_tag(name) {
 /**
  * @todo переименовать, что бы было ясно что это к коментам
  */
-function sand() {
+function sand(url) {
     
     $.ajax({
         type: "POST",
         cache: false,
         dataType: 'json',
-        url: '',
+        url: url,
         data: $("#coment_form").serialize()
     }).done(function(data) {
         //alert(1);

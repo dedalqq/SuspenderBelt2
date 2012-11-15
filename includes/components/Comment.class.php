@@ -30,6 +30,7 @@ class Comment extends DataBasePageElement {
     public function __construct($id = 0) {
         $this->user = new User();
         $this->addToIndexComposition($this->user, 'user_id');
+        $this->values['link'] = $_SERVER['REDIRECT_URL'];
         parent::__construct($id);
     }
     

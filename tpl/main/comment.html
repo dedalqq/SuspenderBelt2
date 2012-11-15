@@ -13,6 +13,9 @@
     <span><b>комментарии</b>: {{user:num_comments}}</span>
 </div>
 <p>{{html_text}}</p>
+<script>
+    $(document).animate({ scrollTop: $('#chat_list').prop("scrollHeight")}, 500);
+</script>
 
 
 
@@ -21,18 +24,20 @@
     <script src="/javascript/jquery.wysibb-1.2.3.min.js"></script>
     <link rel="stylesheet" href="/css/wbbtheme.css" />
     <script>
+        /*
         $(document).ready(function() {
             var wbbOpt = {
                 buttons: "bold,italic,underline,|,img,link,|,quote"
               }
           $("#editor").wysibb(wbbOpt)
         })
+        */
     </script>
-    <form action="" id="coment_form" method="POST">
+    <form action="" id="coment_form" method="POST" class="a_mode_on">
         <input type="hidden" name="object_id" value="{{object_id}}" />
         <input type="hidden" name="object" value="{{object}}" />
         <input type="hidden" name="save" value="1" />
         Текст сообщения:<br><textarea id="editor" name="text">{{text}}</textarea><br />
-        <button onclick="return sand()">Отправить</button>
+        <button onclick="return sand('{{link}}');">Отправить</button>
     </form>
 </div>

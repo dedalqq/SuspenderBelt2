@@ -43,6 +43,7 @@
                     {{content}}
                 </div>
                 <div>
+                    <!--
                     <table class="block dialog" id="dialog_window" cellpadding="0" cellspacing="0">
                         <tr>
                             <td>&emsp;</td><td class="b2">&emsp;</td><td>&emsp;</td>
@@ -58,6 +59,7 @@
                             <td>&emsp;</td><td class="b8">&emsp;</td><td>&emsp;</td>
                         </tr>
                     </table>
+                    -->
                 </div>
             </div>
             {{footer}}
@@ -67,6 +69,19 @@
                 onAjaxMod();
                 
                 $("#apple img[rel]").overlay({effect: 'apple'});
+                
+                window.onscroll = function() {
+                    var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+                    if (scrolled > 73) {
+                        $('div.header').css('position', 'fixed');
+                        $('div.header').css('top', '-73px');
+                    }
+                    else {
+                        $('div.header').css('position', 'absolute');
+                        $('div.header').css('top', '0');
+                    }
+                }
+
             });
         </script>
     </body>

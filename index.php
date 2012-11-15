@@ -7,7 +7,6 @@
 include 'includes/init.php';
 
 
-
 if (App::getCurrentCategory(1) == 'autorisation') {
     Autorisation::i()->controller();
 }
