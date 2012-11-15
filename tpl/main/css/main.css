@@ -396,7 +396,11 @@ table.dialog {
     color: #0049C4;
 }
 
+.chat_user_itm {
+    padding: 3px 0px 0px 3px;
+}
+
 .chat_user_itm:hover {
     background-color: #96cdfe;
-     cursor: pointer;
+    cursor: pointer;
 }

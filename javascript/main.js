@@ -19,7 +19,7 @@ socket.on('user_list', function (data) {
     $('#user_list').html('');
     for (i in data['data']) {
         
-        $('#user_list').append('<div onclick="insert_text(\'@'+data['data'][i]+'\', \'chat_text\')" class="chat_user_itm">'+data['data'][i]+'</div>');
+        $('#user_list').append('<div onclick="insert_text(\'@'+data['data'][i]+' \', \'chat_text\')" class="chat_user_itm">'+data['data'][i]+'</div>');
     }
   });
 
@@ -191,11 +191,16 @@ function sandChatMass() {
     var text = $('#chat_text').val();
 
     var comand = text.match(/\/[a-zA-Z0-9]+\s?/);
-    text = text.replace(/(\/[a-zA-Z0-9]+\s?)/, '');
+    var text = text.replace(/(\/[a-zA-Z0-9]+\s?)/, '');
     
-    //alert(comand);
-    //alert(text);
-    socket.emit('chat', { text: text,  comand: comand});
+    var login = text.match(/@\S+\s?/);
+    
+    var text = text.replace(/(@\S+\s?)/, '<b><u>$1</u></b>');
+    
+    //login = login.replace(/@/, '');
+    //alert(login);
+    
+    socket.emit('chat', { text: text,  comand: comand, login: login});
     
     $('#chat_text').val('');
 }
