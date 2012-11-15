@@ -392,8 +392,12 @@ table.dialog {
     padding: 5px 0px 0px 5px;
 }
 
-.chat #chat_list span {
+.chat #chat_list span.b {
     color: #0049C4;
+}
+
+.chat #chat_list span.g {
+    color: #999999;
 }
 
 .chat_user_itm {

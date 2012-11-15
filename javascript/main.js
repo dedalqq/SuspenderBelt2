@@ -10,7 +10,18 @@ var socket = io.connect('http://'+ws_host+':'+ws_port+'/');
   });
   
   socket.on('chat', function (data) {
-    $('#chat_list').append('<div><span>'+data['user']+'</span>: '+data['data']['text']+'</div>');
+    $('#chat_list').append('<div><span class="b">'+data['user']+'</span>: '+data['data']['text']+'</div>');
+    $('#chat_list').animate({ scrollTop: $('#chat_list').prop("scrollHeight")}, 500);
+  });
+  
+  socket.on('sys_info', function (data) {
+      if (data['type'] == 'connect') {
+          var mass = '<span class="g">Пользователь '+data['data']+' вошел в чат!</span>';
+      }
+      else if (data['type'] == 'disconnect') {
+          var mass = '<span class="g">Пользователь '+data['data']+' вышел из чата!</span>';
+      }
+    $('#chat_list').append('<div>'+mass+'</div>');
     $('#chat_list').animate({ scrollTop: $('#chat_list').prop("scrollHeight")}, 500);
   });
 
