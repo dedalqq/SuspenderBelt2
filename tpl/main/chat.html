@@ -6,3 +6,6 @@
     <button onclick="sandChatMass()">Отправить</button>
     
 </div>
+<script>
+    socket.emit('get_user_list', { text: ''});
+</script>
