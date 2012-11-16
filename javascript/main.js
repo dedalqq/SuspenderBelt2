@@ -71,7 +71,7 @@ function onAjaxMod() {
                 type: "POST",
                 cache: false,
                 dataType: 'json',
-                url: action+'&print_only_content=1',
+                url: action+'?print_only_content=1',
                 data: $(el).serialize()
             }).done(function(data) {
                 loadContent(data);

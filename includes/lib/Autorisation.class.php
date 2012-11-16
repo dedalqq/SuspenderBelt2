@@ -22,6 +22,7 @@ class Autorisation extends DataBasePageElement {
      * @var User 
      */
     public $user;
+    
     private $is_login;
 
     public function __construct() {
@@ -56,7 +57,9 @@ class Autorisation extends DataBasePageElement {
             $this->save();
         }
         
-        if ($this->user_id > 0) {
+        if (isset($_POST['action'])) {
+            $this->controller();
+        }elseif ($this->user_id > 0) {
             $this->user = new User((int)$this->user_id);
         }
         
@@ -88,13 +91,13 @@ class Autorisation extends DataBasePageElement {
         return self::$object;
     }
 
-    public function controller() {
+    private function controller() {
         $page = new PageInfo;
         $this->user = new User();
 
         $page->page_title = 'Авторизация';
 
-        $action = App::getCurrentCategory(2);
+        $action = htmlspecialchars($_POST['action']);
 
         if ($action == 'login') {
             $login = htmlspecialchars($_POST['login']);

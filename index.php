@@ -6,11 +6,7 @@
 
 include 'includes/init.php';
 
-
-if (App::getCurrentCategory(1) == 'autorisation') {
-    Autorisation::i()->controller();
-}
-elseif (App::getCurrentCategory(1) == 'blogs') {
+if (App::getCurrentCategory(1) == 'blogs') {
     BlogController::init();
 }
 elseif (App::getCurrentCategory(1) == 'profile') {

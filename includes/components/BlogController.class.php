@@ -82,6 +82,10 @@ class BlogController {
 
             MainDecorator::i()->addContent($info);
         }
+        else {
+            $blog->setTplName('blog_form');
+            MainDecorator::i()->addContent($blog);
+        }
     }
     
     private function showBlog($id = 0) {

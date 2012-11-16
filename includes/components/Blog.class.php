@@ -55,7 +55,7 @@ class Blog extends DataBasePageElement {
         parent::beforeSave();
 
         if ($this->text == '' || $this->title == '') {
-            App::error('Нельзя сохранить сообщение без текста или без заголовка =Р');
+            App::error('Нельзя сохранить сообщение без текста или без заголовка =Р', false);
             return false;
         }
         

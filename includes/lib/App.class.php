@@ -126,7 +126,7 @@ class App {
         return MainDecorator::i();
     }
     
-    public static function error($error = '404') {
+    public static function error($error = '404', $exit = true) {
         
         if ($error == '404') {
             $info = new PageInfo();
@@ -161,7 +161,9 @@ class App {
         
         MainDecorator::i()->addContent($info);
         App::getMainDecorator()->rander();
-        exit();
+        if ($exit) {
+            exit();
+        }
     }
 
     /**
